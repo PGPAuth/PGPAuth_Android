@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World, MainActivity!</string>
+    <string name="pref_server">Serveradresse</string>
+	<string name="pref_server_summary">Webadresse des cgi-Programms.</string>
+	<string name="pref_expert">Expertenmodus</string>
+	<string name="pref_expert_summary">Zeigt alle Zwischenschritte mit an.</string>
     <string name="app_name">PGPAuth</string>
+	<string name="settings_title">Einstellungen</string>
 
 </resources>

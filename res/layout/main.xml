@@ -1,13 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:gravity="center"
-    android:orientation="vertical" >
+<ScrollView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="match_parent"
+	android:layout_width="fill_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello" />
+	<LinearLayout
+		android:layout_height="match_parent"
+		android:layout_width="fill_parent"
+		android:orientation="vertical">
 
-</LinearLayout>
+		<TextView
+			android:layout_height="wrap_content"
+			android:text="chch Tür aufschließen - HTTP/PGP"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:layout_width="wrap_content"/>
+
+		<RadioButton
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:text="Aufschließen"
+			android:id="@+id/mainRadioButtonActionOpen"
+			android:onClick="actionOpenClicked" />
+
+		<RadioButton
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:text="Zuschließen"
+			android:id="@+id/mainRadioButtonActionClose"
+			android:onClick="actionCloseClicked"/>
+
+		<Button
+			android:layout_height="wrap_content"
+			android:text="Datensatz generieren"
+			android:layout_width="fill_parent"
+			android:onClick="generateDatasetClicked"/>
+
+		<TextView
+			android:layout_height="wrap_content"
+			android:text="Das da signieren:"
+			android:layout_width="fill_parent"/>
+
+		<EditText
+			android:layout_height="wrap_content"
+			android:inputType="textMultiLine"
+			android:ems="50"
+			android:layout_width="fill_parent"
+			android:id="@+id/mainEditTextDataset"/>
+		
+		<Button
+			android:text="Signieren (benötigt APG)"
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent" 
+			android:onClick="signClicked" />
+
+		<TextView
+			android:layout_height="wrap_content"
+			android:text="Signatur einfügen"
+			android:layout_width="wrap_content"/>
+
+		<EditText
+			android:layout_height="wrap_content"
+			android:inputType="textMultiLine"
+			android:ems="50"
+			android:layout_width="fill_parent"
+			android:id="@+id/mainEditTextSignedData" />
+
+		<Button
+			android:layout_height="wrap_content"
+			android:text="Aktion an Server senden"
+			android:layout_width="fill_parent"
+			android:onClick="sendToServerClicked" />
+
+	</LinearLayout>
+
+</ScrollView>
+

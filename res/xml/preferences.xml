@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:key="pref_server"
+        android:title="@string/pref_server"
+        android:summary="@string/pref_server_summary"
+        android:defaultValue="http://door.chaoschemnitz.de/cgi-bin/pgpauth" />
+	<SwitchPreference
+		android:key="pref_expert"
+		android:title="@string/pref_expert"
+		android:summary="@string/pref_expert_summary"
+		android:defaultValue="false" />
+</PreferenceScreen>
