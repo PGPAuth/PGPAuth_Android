@@ -1,16 +1,25 @@
 package org.lf_net.pgpunlocker;
 
-import android.app.*;
-import android.os.*;
-import android.view.*;
-import android.widget.*;
-import android.util.*;
-import android.content.*;
-import android.content.pm.*;
+import java.util.concurrent.ExecutionException;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.preference.*;
-import java.util.concurrent.*;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.Toast;
 
 public class MainActivity extends Activity
 {
@@ -177,10 +186,18 @@ public class MainActivity extends Activity
 	}
 	
 	private void makeSignature(String signData) {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		
 		Intent intent = new Intent("org.thialfihar.android.apg.intent.ENCRYPT_AND_RETURN");
 		intent.putExtra("intentVersion", 1);
 		intent.setType("text/plain");
 		intent.putExtra("text", signData);
+		
+		if(prefs.getString("pref_key", "") != "")
+		{
+			intent.putExtra("signatureKeyId", Long.parseLong(prefs.getString("pref_key", "")));
+		}
+		
 		startActivityForResult(intent, 0x0000A002);
 	}
 	

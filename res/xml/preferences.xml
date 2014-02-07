@@ -5,6 +5,11 @@
         android:title="@string/pref_server"
         android:summary="@string/pref_server_summary"
         android:defaultValue="http://door.chaoschemnitz.de/cgi-bin/pgpauth" />
+    <org.lf_net.pgpunlocker.PGPKeyPreference
+	    android:key="pref_key"
+	    android:title="@string/pref_key"
+	    android:summary="@string/pref_key_summary"
+	    android:defaultValue="" />
 	<SwitchPreference
 		android:key="pref_expert"
 		android:title="@string/pref_expert"
