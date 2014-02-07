@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">PGPAuth</string>
-	<string name="button_homepage">Homepage</string>
-	<string name="button_playStore">Play-Store</string>
-	<string name="button_googlePlus">Google+</string>
-	<string name="button_twitter">Twitter</string>
-	<string name="button_facebook">Facebook</string>
+	<string name="app_name" translatable="false">PGPAuth</string>
+	<string name="button_homepage" translatable="false">Homepage</string>
+	<string name="button_playStore" translatable="false">Play-Store</string>
+	<string name="button_googlePlus" translatable="false">Google+</string>
+	<string name="button_twitter" translatable="false">Twitter</string>
+	<string name="button_facebook" translatable="false">Facebook</string>
 	
 	
 	<!-- default string from english language file -->
