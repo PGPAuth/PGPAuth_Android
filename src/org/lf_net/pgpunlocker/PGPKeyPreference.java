@@ -6,6 +6,8 @@ import android.media.RingtoneManager;
 import android.preference.*;
 import android.util.AttributeSet;
 
+//Why I'm using a RingtonePreference? Because all the others don't have onActivityResult ...
+//http://yenliangl.blogspot.de/2011/04/preference-that-receives-activity.html
 public class PGPKeyPreference extends RingtonePreference {
 
 	Context _context;
