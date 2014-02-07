@@ -9,36 +9,30 @@
 		android:layout_width="fill_parent"
 		android:orientation="vertical">
 
-		<TextView
-			android:layout_height="wrap_content"
-			android:text="chch Tür aufschließen - HTTP/PGP"
-			android:textAppearance="?android:attr/textAppearanceLarge"
-			android:layout_width="wrap_content"/>
+		<RadioButton
+		    android:id="@+id/mainRadioButtonActionOpen"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:onClick="actionOpenClicked"
+		    android:text="@string/btn_unlock" />
 
 		<RadioButton
-			android:layout_height="wrap_content"
-			android:layout_width="wrap_content"
-			android:text="Aufschließen"
-			android:id="@+id/mainRadioButtonActionOpen"
-			android:onClick="actionOpenClicked" />
-
-		<RadioButton
-			android:layout_height="wrap_content"
-			android:layout_width="wrap_content"
-			android:text="Zuschließen"
-			android:id="@+id/mainRadioButtonActionClose"
-			android:onClick="actionCloseClicked"/>
+		    android:id="@+id/mainRadioButtonActionClose"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:onClick="actionCloseClicked"
+		    android:text="@string/btn_lock" />
 
 		<Button
-			android:layout_height="wrap_content"
-			android:text="Datensatz generieren"
-			android:layout_width="fill_parent"
-			android:onClick="generateDatasetClicked"/>
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:onClick="generateDatasetClicked"
+		    android:text="@string/btn_generate_dataset" />
 
 		<TextView
-			android:layout_height="wrap_content"
-			android:text="Das da signieren:"
-			android:layout_width="fill_parent"/>
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:text="@string/label_request_to_sign" />
 
 		<EditText
 			android:layout_height="wrap_content"
@@ -48,15 +42,15 @@
 			android:id="@+id/mainEditTextDataset"/>
 		
 		<Button
-			android:text="Signieren (benötigt APG)"
-			android:layout_height="wrap_content"
-			android:layout_width="fill_parent" 
-			android:onClick="signClicked" />
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:onClick="signClicked"
+		    android:text="@string/btn_sign_request" />
 
 		<TextView
-			android:layout_height="wrap_content"
-			android:text="Signatur einfügen"
-			android:layout_width="wrap_content"/>
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="@string/label_signed_data" />
 
 		<EditText
 			android:layout_height="wrap_content"
@@ -66,10 +60,10 @@
 			android:id="@+id/mainEditTextSignedData" />
 
 		<Button
-			android:layout_height="wrap_content"
-			android:text="Aktion an Server senden"
-			android:layout_width="fill_parent"
-			android:onClick="sendToServerClicked" />
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:onClick="sendToServerClicked"
+		    android:text="@string/btn_send_request" />
 
 	</LinearLayout>
 

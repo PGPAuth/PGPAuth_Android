@@ -24,24 +24,30 @@ public class MainActivity extends Activity
 	
 	ProgressBar _progressBar;
 	
+	boolean _expertMode;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
 	{
         super.onCreate(savedInstanceState);
 		
-		if(!detectApg())
-		{
-			Toast.makeText(getApplicationContext(), "APG muss installiert sein!", Toast.LENGTH_LONG).show();
-			finish();
-		}
-		
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		
-		if(prefs.getBoolean("pref_expert", false))
+		_expertMode = prefs.getBoolean("pref_expert", false);
+		
+		if(_expertMode)
         	setContentView(R.layout.main);
 		else
+		{
 			setContentView(R.layout.easy);
+			
+			if(!detectApg())
+			{
+				Toast.makeText(getApplicationContext(), getText(R.string.apg_not_installed), Toast.LENGTH_LONG).show();
+				finish();
+			}
+		}
 		
 		_radioButtonClose = (RadioButton)findViewById(R.id.mainRadioButtonActionClose);
 		_radioButtonOpen = (RadioButton)findViewById(R.id.mainRadioButtonActionOpen);
@@ -65,6 +71,11 @@ public class MainActivity extends Activity
 		startActivityForResult(intent, 0x0000A001);
 	}
 	
+	public void menuAboutClicked(MenuItem item) {
+		Intent intent = new Intent(this, AboutActivity.class);
+		startActivity(intent);
+	}
+	
 	private boolean detectApg() {
 		Context context = getApplicationContext();
 		
@@ -73,7 +84,7 @@ public class MainActivity extends Activity
             if (pi.versionCode >= 16) {
                 return true;
             } else {
-                Toast.makeText(context, "Unsupported APG version!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, getText(R.string.apt_invalid_version),Toast.LENGTH_SHORT).show();
             }
         } catch (NameNotFoundException e) {
             // not found
@@ -108,15 +119,23 @@ public class MainActivity extends Activity
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch(requestCode) {
 			case 0x0000A001:
-				AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-				dialog.setMessage("Einige Einstellungen erfordern einen Neustart der App.");
-				dialog.setPositiveButton("OK",new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
-							finish(); 
-						}
-					});
-				dialog.create().show();
+			{
+				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+				if(_expertMode != prefs.getBoolean("pref_expert",  false))
+				{
+					AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+					dialog.setMessage(getText(R.string.settings_restart_required));
+					dialog.setTitle(getText(R.string.settings_restart_required_title));
+					dialog.setPositiveButton(android.R.string.ok ,new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int whichButton) {
+								finish();
+							}
+						});
+					dialog.setCancelable(false);
+					dialog.create().show();
+				}
 				break;
+			}
 				
 			case 0x0000A002:
 				String signedData;

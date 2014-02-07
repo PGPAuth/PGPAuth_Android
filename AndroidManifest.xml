@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.lf_net.pgpunlocker"
-    android:versionCode="5"
-    android:versionName="1.1" >
+    android:versionCode="6"
+    android:versionName="1.2" >
 
     <uses-sdk 
         android:minSdkVersion="8" 
@@ -22,8 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-		<activity android:label="@string/settings_title" android:name=".SettingsActivity">
-		</activity>
+		<activity android:label="@string/settings_title" android:name=".SettingsActivity" />
+		<activity android:label="@string/about_title" android:name=".AboutActivity" />
     </application>
 
 </manifest>
