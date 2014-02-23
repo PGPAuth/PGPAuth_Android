@@ -44,7 +44,7 @@ public class PGPKeyPreference extends RingtonePreference {
 	@Override
 	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(super.onActivityResult(requestCode, resultCode, data)) {
-			if(data.hasExtra("keyId")) {
+			if(data != null && data.hasExtra("keyId")) {
 				persistString(String.valueOf(data.getLongExtra("keyId", 0)));
 			}
 		}
