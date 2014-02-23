@@ -8,14 +8,14 @@
 	<string name="pref_key">PGP-Key</string>
 	<string name="pref_key_summary">Der zum Signieren zu verwendende Key</string>	
 	<string name="settings_title">Einstellungen</string>
-	<string name="apg_not_installed">APG ist nicht installiert!</string>
+	<string name="apg_and_opengpg_keychain_not_installed">Weder APG noch OpenPGP Keychain sind installiert!</string>
 	<string name="apt_invalid_version">Nicht unterstützte APG-Version!</string>
 	<string name="settings_restart_required_title">Neustart erforderlich</string>
 	<string name="settings_restart_required">Einige Einstellungen erfordern einen Neustart der App.</string>
 	<string name="btn_lock">Zuschließen</string>
 	<string name="btn_unlock">Aufschließen</string>
 	<string name="btn_generate_dataset">Anfrage generieren</string>
-	<string name="btn_sign_request">Signieren (benötigt APG)</string>
+	<string name="btn_sign_request">Signieren (benötigt APG oder OpenPGP Keychain)</string>
 	<string name="btn_send_request">Senden</string>
 	<string name="label_request_to_sign">Diese Daten signieren:</string>
 	<string name="label_signed_data">Signierte Daten:</string>

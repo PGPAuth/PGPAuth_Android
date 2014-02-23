@@ -35,6 +35,8 @@ public class MainActivity extends Activity
 	
 	boolean _expertMode;
 	
+	boolean _useOpenPGPKeyChain;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -51,11 +53,13 @@ public class MainActivity extends Activity
 		{
 			setContentView(R.layout.easy);
 			
-			if(!detectApg())
+			if(!detectApg() && ! detectOpenPGPKeyChain())
 			{
-				Toast.makeText(getApplicationContext(), getText(R.string.apg_not_installed), Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(), getText(R.string.apg_and_opengpg_keychain_not_installed), Toast.LENGTH_LONG).show();
 				finish();
 			}
+			
+			_useOpenPGPKeyChain = prefs.getBoolean("pref_openpgpkeychain", detectOpenPGPKeyChain());
 		}
 		
 		_radioButtonClose = (RadioButton)findViewById(R.id.mainRadioButtonActionClose);
@@ -100,6 +104,22 @@ public class MainActivity extends Activity
         }
 
         return false;
+	}
+	
+	private boolean detectOpenPGPKeyChain() {
+		Context context = getApplicationContext();
+		
+		try {
+			PackageInfo pi = context.getPackageManager().getPackageInfo("org.sufficientlysecure.keychain", 0);
+			
+			if(pi.versionCode > 20000) {
+				return true;
+			}
+		} catch(NameNotFoundException e) {
+			// not found
+		}
+		
+		return false;
 	}
 	
 	public void actionOpenClicked(View view) {
@@ -188,10 +208,19 @@ public class MainActivity extends Activity
 	private void makeSignature(String signData) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		
-		Intent intent = new Intent("org.thialfihar.android.apg.intent.ENCRYPT_AND_RETURN");
+		String intentUri;
+		
+		if(!_useOpenPGPKeyChain) {
+			intentUri = "org.thialfihar.android.apg.intent.ENCRYPT_AND_RETURN";
+		} else {
+			intentUri = "org.sufficientlysecure.keychain.action.ENCRYPT";
+		}
+		
+		Intent intent = new Intent(intentUri);
 		intent.putExtra("intentVersion", 1);
 		intent.setType("text/plain");
 		intent.putExtra("text", signData);
+		intent.putExtra("ascii_armor", true);
 		
 		if(prefs.getString("pref_key", "") != "")
 		{
