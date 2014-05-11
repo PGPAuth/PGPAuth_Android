@@ -5,6 +5,8 @@
 	<string name="pref_server_summary">URL of the CGI-program on a web-accessible location-</string>
 	<string name="pref_expert">Expert mode</string>
 	<string name="pref_expert_summary">Shows all single steps.</string>
+	<string name="pref_key">PGP-Key</string>
+	<string name="pref_key_summary">The used for signing (APG only)</string>
 	<string name="settings_title">Settings</string>
 	<string name="apg_and_opengpg_keychain_not_installed">You have neither APG nor OpenPGP Keychain installed!</string>
 	<string name="apt_invalid_version">APG version is not supported!</string>

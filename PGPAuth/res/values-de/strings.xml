@@ -6,7 +6,7 @@
 	<string name="pref_expert">Expertenmodus</string>
 	<string name="pref_expert_summary">Zeigt alle Zwischenschritte mit an.</string>
 	<string name="pref_key">PGP-Key</string>
-	<string name="pref_key_summary">Der zum Signieren zu verwendende Key</string>	
+	<string name="pref_key_summary">Der zum Signieren zu verwendende Key (nur APG)</string>	
 	<string name="settings_title">Einstellungen</string>
 	<string name="apg_and_opengpg_keychain_not_installed">Weder APG noch OpenPGP Keychain sind installiert!</string>
 	<string name="apt_invalid_version">Nicht unterstützte APG-Version!</string>
