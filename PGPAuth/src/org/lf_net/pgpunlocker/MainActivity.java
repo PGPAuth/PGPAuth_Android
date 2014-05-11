@@ -1,25 +1,22 @@
 package org.lf_net.pgpunlocker;
 
+import java.io.*;
 import java.util.concurrent.ExecutionException;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
+import org.openintents.openpgp.OpenPgpError;
+import org.openintents.openpgp.OpenPgpSignatureResult;
+import org.openintents.openpgp.util.*;
+
+import android.app.*;
+import android.content.*;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.RadioButton;
-import android.widget.Toast;
+import android.provider.SyncStateContract.Constants;
+import android.util.Log;
+import android.view.*;
+import android.widget.*;
 
 public class MainActivity extends Activity
 {
@@ -37,6 +34,8 @@ public class MainActivity extends Activity
 	
 	boolean _useOpenPGPKeyChain;
 	
+	OpenPgpServiceConnection _serviceConnection;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -52,14 +51,20 @@ public class MainActivity extends Activity
 		else
 		{
 			setContentView(R.layout.easy);
-			
-			if(!detectApg() && ! detectOpenPGPKeyChain())
-			{
-				Toast.makeText(getApplicationContext(), getText(R.string.apg_and_opengpg_keychain_not_installed), Toast.LENGTH_LONG).show();
-				finish();
-			}
-			
-			_useOpenPGPKeyChain = prefs.getBoolean("pref_openpgpkeychain", detectOpenPGPKeyChain());
+		}
+		
+		if(!detectApg() && ! detectOpenPGPKeyChain())
+		{
+			Toast.makeText(getApplicationContext(), getText(R.string.apg_and_opengpg_keychain_not_installed), Toast.LENGTH_LONG).show();
+			finish();
+		}
+		
+		_useOpenPGPKeyChain = prefs.getBoolean("pref_openpgpkeychain", detectOpenPGPKeyChain());
+		
+		if(_useOpenPGPKeyChain)
+		{
+			_serviceConnection = new OpenPgpServiceConnection(this, "org.sufficientlysecure.keychain");
+		    _serviceConnection.bindToService();
 		}
 		
 		_radioButtonClose = (RadioButton)findViewById(R.id.mainRadioButtonActionClose);
@@ -70,6 +75,15 @@ public class MainActivity extends Activity
 		
 		if(_progressBar != null)
 			_progressBar.setVisibility(View.INVISIBLE);
+    }
+    
+    @Override
+    public void onDestroy() {
+        if (_serviceConnection != null) {
+            _serviceConnection.unbindFromService();
+        }
+        
+        super.onDestroy();
     }
 	
 	@Override
@@ -179,6 +193,10 @@ public class MainActivity extends Activity
 					sendToServer(signedData);
 				break;
 			
+			case 0x0000A003:
+                sendOpenKeychainIntent(data);
+                break;
+				
 			default:
 				super.onActivityResult(requestCode, resultCode, data);
 				break;
@@ -208,26 +226,68 @@ public class MainActivity extends Activity
 	private void makeSignature(String signData) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		
-		String intentUri;
+		String prefKey = prefs.getString("pref_key", "");
 		
-		if(!_useOpenPGPKeyChain) {
-			intentUri = "org.thialfihar.android.apg.intent.ENCRYPT_AND_RETURN";
+		if(!_useOpenPGPKeyChain) {			
+			Intent intent = new Intent("org.thialfihar.android.apg.intent.ENCRYPT_AND_RETURN");
+			intent.putExtra("intentVersion", 1);
+			intent.setType("text/plain");
+			intent.putExtra("text", signData);
+			intent.putExtra("ascii_armor", true);
+			
+			if(prefKey != "")
+			{
+				intent.putExtra("signatureKeyId", Long.parseLong(prefKey));
+			}
+			
+			startActivityForResult(intent, 0x0000A002);
 		} else {
-			intentUri = "org.sufficientlysecure.keychain.action.ENCRYPT";
-		}
+			Intent intent = new Intent();
+			intent.setAction(OpenPgpApi.ACTION_SIGN);
+			intent.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
+			intent.putExtra("PGPAuth_SIGNDATA", signData);
+			
+			sendOpenKeychainIntent(intent);
+		}		
+	}
+	
+	private void sendOpenKeychainIntent(Intent data)
+	{
+		InputStream is = new ByteArrayInputStream(data.getExtras().getString("PGPAuth_SIGNDATA").getBytes());
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		
-		Intent intent = new Intent(intentUri);
-		intent.putExtra("intentVersion", 1);
-		intent.setType("text/plain");
-		intent.putExtra("text", signData);
-		intent.putExtra("ascii_armor", true);
+		OpenPgpApi api = new OpenPgpApi(this, _serviceConnection.getService());
+		Intent result = api.executeApi(data, is, os);
 		
-		if(prefs.getString("pref_key", "") != "")
-		{
-			intent.putExtra("signatureKeyId", Long.parseLong(prefs.getString("pref_key", "")));
-		}
-		
-		startActivityForResult(intent, 0x0000A002);
+		switch (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
+	    case OpenPgpApi.RESULT_CODE_SUCCESS: {
+	    	try {
+	    		String signature = os.toString("UTF-8");
+	            
+	            if(_editTextSignedData != null)
+					_editTextSignedData.setText(signature);
+				else
+					sendToServer(signature);
+	        } catch (UnsupportedEncodingException e) {
+	            Toast.makeText(this, "UnsupportedEncodingException\n\n" + e.getMessage(), Toast.LENGTH_LONG).show();
+	        }
+	        break;
+	    }
+	    case OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED: {
+	        PendingIntent pi = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
+	        try {
+	            startIntentSenderForResult(pi.getIntentSender(), 0x0000A003, null, 0, 0, 0);
+	        } catch (IntentSender.SendIntentException e) {
+	            Toast.makeText(this, "SendIntentException\n\n" + e.getMessage(), Toast.LENGTH_LONG).show();
+	        }
+	        break;
+	    }
+	    case OpenPgpApi.RESULT_CODE_ERROR: {
+	        OpenPgpError error = result.getParcelableExtra(OpenPgpApi.RESULT_ERROR);
+	        Toast.makeText(this, error.getMessage(), Toast.LENGTH_LONG).show();
+	        break;
+	    }
+	}
 	}
 	
 	private void sendToServer(String data) {
