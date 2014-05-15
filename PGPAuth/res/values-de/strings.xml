@@ -17,9 +17,11 @@
 	<string name="btn_generate_dataset">Anfrage generieren</string>
 	<string name="btn_sign_request">Signieren (benötigt APG oder OpenPGP Keychain)</string>
 	<string name="btn_send_request">Senden</string>
+	<string name="btn_ok">OK</string>
 	<string name="label_request_to_sign">Diese Daten signieren:</string>
 	<string name="label_signed_data">Signierte Daten:</string>
-	
+	<string name="no_server_set_title">Kein Server eingestellt</string>
+	<string name="no_server_set">Bitte einen Server einstellen.</string>
 	<string name="about_title">Über PGPAuth</string>
 	<string name="about_text">Diese App sendet PGP-signierte Anfragen an einen definierten Server.\nDiese Anfragen bestehen aus einer Aktion (momentan öffnen oder schließen) und einem Zeitstempel, um das Abfangen und erneute Senden der Anfrage zu unterbinden.\n\nDer Server prüft die Aktion der Anfrage, den Zeitstempel, die Gültigkeit der Signatur und die Autorisierung des verwendeten Schlüssels bis er schließlich die Aktion ausführt.</string>
 	

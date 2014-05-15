@@ -22,12 +22,14 @@
 	<string name="settings_restart_required">Some settings require you to restart the app.</string>
 	<string name="btn_lock">Lock</string>
 	<string name="btn_unlock">Unlock</string>
+	<string name="btn_ok">OK</string>
 	<string name="btn_generate_dataset">Generate request</string>
 	<string name="btn_sign_request">Sign (needs APG or OpenPGP Keychain)</string>
 	<string name="btn_send_request">Send</string>
 	<string name="label_request_to_sign">Data to sign:</string>
 	<string name="label_signed_data">Signed data:</string>
-	
+	<string name="no_server_set_title">No server set</string>
+	<string name="no_server_set">Please set a server!</string>
 	<string name="about_title">About PGPAuth</string>
 	<string name="about_text">This app sends PGP-signed requests to an defined server.\nThe requests contains an action (currently open or close) and a timestamp, to protect against replay-attacks.\n\nThe server then checks the action, the timestamp, the validity of the signature and the autorization of the used key. After all these checks, the action is done by the server.</string>
 </resources>

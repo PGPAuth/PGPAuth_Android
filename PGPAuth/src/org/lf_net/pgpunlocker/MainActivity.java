@@ -294,6 +294,28 @@ public class MainActivity extends Activity
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
 		String server = prefs.getString("pref_server", "");
+
+		if(server == null || server == "")
+		{
+			AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+			dlg.setTitle(R.string.no_server_set_title);
+			dlg.setMessage(R.string.no_server_set);
+
+			dlg.setPositiveButton(R.string.btn_ok,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+				});
+
+			dlg.create().show();
+
+			if(_progressBar != null)
+				_progressBar.setVisibility(View.INVISIBLE);
+
+			return;
+		}
+
 		String[] params = new String[]{server, data};
 
 		HttpPostTask task = new HttpPostTask();
