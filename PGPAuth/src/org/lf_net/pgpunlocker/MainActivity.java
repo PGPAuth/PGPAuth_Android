@@ -3,6 +3,7 @@ package org.lf_net.pgpunlocker;
 import java.io.*;
 import java.util.concurrent.ExecutionException;
 
+import org.apache.http.client.utils.URIUtils;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.OpenPgpSignatureResult;
 import org.openintents.openpgp.util.*;
@@ -11,11 +12,13 @@ import android.app.*;
 import android.content.*;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.SyncStateContract.Constants;
 import android.util.Log;
 import android.view.*;
+import android.webkit.URLUtil;
 import android.widget.*;
 
 public class MainActivity extends Activity
@@ -294,14 +297,21 @@ public class MainActivity extends Activity
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
 		String server = prefs.getString("pref_server", "");
-
-		if(server == null || server == "")
+		
+		if(server == null || server == "" || !URLUtil.isValidUrl(server))
 		{
 			AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-			dlg.setTitle(R.string.no_server_set_title);
-			dlg.setMessage(R.string.no_server_set);
+			
+			if(server == null || server == "") {
+				dlg.setTitle(R.string.no_server_set_title);
+				dlg.setMessage(R.string.no_server_set);
+			}
+			else if(!URLUtil.isValidUrl(server)) {
+				dlg.setTitle(R.string.invalid_server_set_title);
+				dlg.setMessage(R.string.invalid_server_set);
+			}
 
-			dlg.setPositiveButton(R.string.btn_ok,
+			dlg.setPositiveButton(android.R.string.ok,
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						dialog.cancel();
@@ -320,7 +330,13 @@ public class MainActivity extends Activity
 
 		HttpPostTask task = new HttpPostTask();
 		try {
-			Toast.makeText(getApplicationContext(), task.execute(params).get(), Toast.LENGTH_LONG).show();
+			String ret = task.execute(params).get();
+			
+			if(ret == null) {
+				ret = getResources().getString(android.R.string.ok);
+			}
+			
+			Toast.makeText(getApplicationContext(), ret, Toast.LENGTH_LONG).show();
 		}
 		catch(InterruptedException e) {
 			Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
