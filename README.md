@@ -13,3 +13,7 @@ When everything is checked, you will have to extract the request from the messag
 
 You can use PGPAuth_CGI to handle requests:
 https://github.com/LittleFox94/PGPAuth_CGI/
+
+## How can I help?
+You can use it and provide feedback if you wish a feature or catched a bug.
+You can also help with translation, just go to https://www.transifex.com/projects/p/pgpauth/ 
