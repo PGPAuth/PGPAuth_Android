@@ -2,7 +2,7 @@
 <resources>
 	<string name="app_name" translatable="false">PGPAuth</string>
 	<string name="button_homepage" translatable="false">Homepage</string>
-	<string name="button_playStore" translatable="false">Play-Store</string>
+	<string name="button_playStore" translatable="false">Store</string>
 	<string name="button_googlePlus" translatable="false">Google+</string>
 	<string name="button_twitter" translatable="false">Twitter</string>
 	<string name="button_facebook" translatable="false">Facebook</string>

@@ -39,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="onWebsiteClick"
-                android:tag="http://lf-net.org/RC-Control.html"
+                android:tag="https://littlefox94.github.io/PGPAuth"
                 android:text="@string/button_homepage" />
 
             <LinearLayout
@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.25"
                     android:onClick="onWebsiteClick"
-                    android:tag="https://play.google.com/store/apps/details?id=org.lf_net.rc_control"
+                    android:tag="market://details?id=org.lf_net.pgpunlocker"
                     android:text="@string/button_playStore" />
 
                 <Button
