@@ -11,22 +11,13 @@
 	<!-- default string from english language file -->
 	<string name="pref_server">Serveraddress</string>
 	<string name="pref_server_summary">URL of the CGI-program on a web-accessible location-</string>
-	<string name="pref_expert">Expert mode</string>
-	<string name="pref_expert_summary">Shows all single steps.</string>
 	<string name="pref_key">PGP-Key</string>
 	<string name="pref_key_summary">The key used for signing (APG only)</string>
 	<string name="settings_title">Settings</string>
 	<string name="apg_and_opengpg_keychain_not_installed">You have neither APG nor OpenPGP Keychain installed!</string>
 	<string name="apt_invalid_version">APG version is not supported!</string>
-	<string name="settings_restart_required_title">Restart required</string>
-	<string name="settings_restart_required">Some settings require you to restart the app.</string>
 	<string name="btn_lock">Lock</string>
 	<string name="btn_unlock">Unlock</string>
-	<string name="btn_generate_dataset">Generate request</string>
-	<string name="btn_sign_request">Sign (needs APG or OpenPGP Keychain)</string>
-	<string name="btn_send_request">Send</string>
-	<string name="label_request_to_sign">Data to sign:</string>
-	<string name="label_signed_data">Signed data:</string>
 	<string name="no_server_set_title">No server set</string>
 	<string name="no_server_set">Please set a server!</string>
 	<string name="invalid_server_set_title">Invalid server set</string>

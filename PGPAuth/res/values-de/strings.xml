@@ -2,8 +2,6 @@
 <resources>
 	<string name="pref_server">Serveradresse</string>
 	<string name="pref_server_summary">Webadresse des cgi-Programms.</string>
-	<string name="pref_expert">Expertenmodus</string>
-	<string name="pref_expert_summary">Zeigt alle Zwischenschritte mit an.</string>
 	<string name="pref_key">PGP-Key</string>
 	<string name="pref_key_summary">Der zum Signieren zu verwendende Key (nur APG)</string>
 	<string name="settings_title">Einstellungen</string>
@@ -11,17 +9,8 @@
 	<string name="apt_invalid_version">
 	Die installierte APG-Version wird nicht unterstützt!
 	</string>
-	<string name="settings_restart_required_title">Neustart erforderlich</string>
-	<string name="settings_restart_required">
-	Manche Einstellungen erfordern einen Neustart der App.
-	</string>
 	<string name="btn_lock">Zuschließen</string>
 	<string name="btn_unlock">Aufschließen</string>
-	<string name="btn_generate_dataset">Anfrage generieren</string>
-	<string name="btn_sign_request">Signieren (benötigt APG oder OpenKeychain)</string>
-	<string name="btn_send_request">Senden</string>
-	<string name="label_request_to_sign">Zu signierende Daten:</string>
-	<string name="label_signed_data">Signierte Daten:</string>
 	<string name="no_server_set_title">Kein Server eingestellt</string>
 	<string name="no_server_set">Bitte einen Server einstellen!</string>
 	<string name="invalid_server_set_title">Ungültiger Server eingestellt</string>

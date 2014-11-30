@@ -10,9 +10,4 @@
 	    android:title="@string/pref_key"
 	    android:summary="@string/pref_key_summary"
 	    android:defaultValue="" />
-	<SwitchPreference
-		android:key="pref_expert"
-		android:title="@string/pref_expert"
-		android:summary="@string/pref_expert_summary"
-		android:defaultValue="false" />
 </PreferenceScreen>

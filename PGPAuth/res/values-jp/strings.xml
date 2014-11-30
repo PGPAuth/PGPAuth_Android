@@ -1,24 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <!--default string from english language file-->
   <string name="pref_server">サーバーアドレス</string>
   <string name="pref_server_summary">ウェブアクセス可能な場所にあるCGIプログラムのURL</string>
-  <string name="pref_expert">エクスポートモード</string>
-  <string name="pref_expert_summary">ステップ単位にすべて表示します</string>
   <string name="pref_key">PGPキー</string>
   <string name="pref_key_summary">署名に使用するキー (APGのみ)</string>
   <string name="settings_title">設定</string>
   <string name="apg_and_opengpg_keychain_not_installed">APG と OpenPGP Keychain のどちらもインストールされていません!</string>
   <string name="apt_invalid_version">APG のバージョンがサポートされていません!</string>
-  <string name="settings_restart_required_title">再起動が必要です</string>
-  <string name="settings_restart_required">いくつかの設定で、アプリの再起動が必要です。</string>
   <string name="btn_lock">ロック</string>
   <string name="btn_unlock">ロック解除</string>
-  <string name="btn_generate_dataset">生成リクエスト</string>
-  <string name="btn_sign_request">署名 (APG または OpenPGP Keychain が必要)</string>
-  <string name="btn_send_request">送信</string>
-  <string name="label_request_to_sign">署名するデータ:</string>
-  <string name="label_signed_data">署名済データ:</string>
   <string name="no_server_set_title">サーバーが設定されていません</string>
   <string name="no_server_set">サーバーを設定してください!</string>
   <string name="invalid_server_set_title">サーバーの設定が正しくありません</string>

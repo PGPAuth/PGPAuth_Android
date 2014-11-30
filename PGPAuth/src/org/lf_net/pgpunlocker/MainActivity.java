@@ -1,43 +1,23 @@
 package org.lf_net.pgpunlocker;
 
-import java.io.*;
-import java.util.concurrent.ExecutionException;
-
-import org.apache.http.client.utils.URIUtils;
-import org.openintents.openpgp.OpenPgpError;
-import org.openintents.openpgp.OpenPgpSignatureResult;
-import org.openintents.openpgp.util.*;
-
-import android.app.*;
-import android.content.*;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.net.Uri;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.IntentSender;
+import android.content.IntentSender.SendIntentException;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.SyncStateContract.Constants;
-import android.util.Log;
-import android.view.*;
-import android.webkit.URLUtil;
-import android.widget.*;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 public class MainActivity extends Activity
-{
-	RadioButton _radioButtonClose;
+{	
+	Logic _logic;
 	
-	RadioButton _radioButtonOpen;
-	
-	EditText _editTextDataset;
-	
-	EditText _editTextSignedData;
-	
-	ProgressBar _progressBar;
-	
-	boolean _expertMode;
-	
-	boolean _useOpenPGPKeyChain;
-	
-	OpenPgpServiceConnection _serviceConnection;
+	private Logic.GuiHelper _guiHelper;
 	
     /** Called when the activity is first created. */
     @Override
@@ -47,43 +27,35 @@ public class MainActivity extends Activity
 		
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		
-		_expertMode = prefs.getBoolean("pref_expert", false);
+		setContentView(R.layout.activity_main);
 		
-		if(_expertMode)
-        	setContentView(R.layout.main);
-		else
-		{
-			setContentView(R.layout.easy);
+		try {
+			_logic = new Logic(this, prefs.getBoolean("pref_forceapg", false));
+			
+			_guiHelper = _logic.new GuiHelper() {
+				public void startActivityForResult(Intent intent, int requestCode) {
+					MainActivity.this.startActivityForResult(intent, requestCode + 0x0000B000);
+				}
+				
+				public void startIntentSenderForResult(IntentSender intentSender, int requestCode) {
+					try {
+						MainActivity.this.startIntentSenderForResult(intentSender, requestCode + 0x0000B000, null, 0, 0, 0);
+					} catch (SendIntentException e) {
+						// just fuck you
+					}
+				}
+			};
 		}
-		
-		if(!detectApg() && ! detectOpenPGPKeyChain())
-		{
-			Toast.makeText(getApplicationContext(), getText(R.string.apg_and_opengpg_keychain_not_installed), Toast.LENGTH_LONG).show();
+		catch(Exception e) {
+			Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
 			finish();
 		}
-		
-		_useOpenPGPKeyChain = prefs.getBoolean("pref_openpgpkeychain", detectOpenPGPKeyChain());
-		
-		if(_useOpenPGPKeyChain)
-		{
-			_serviceConnection = new OpenPgpServiceConnection(this, "org.sufficientlysecure.keychain");
-		    _serviceConnection.bindToService();
-		}
-		
-		_radioButtonClose = (RadioButton)findViewById(R.id.mainRadioButtonActionClose);
-		_radioButtonOpen = (RadioButton)findViewById(R.id.mainRadioButtonActionOpen);
-		_editTextDataset = (EditText)findViewById(R.id.mainEditTextDataset);
-		_editTextSignedData =(EditText)findViewById(R.id.mainEditTextSignedData);
-		_progressBar = (ProgressBar)findViewById(R.id.easyProgressBarRunning);
-		
-		if(_progressBar != null)
-			_progressBar.setVisibility(View.INVISIBLE);
     }
     
     @Override
     public void onDestroy() {
-        if (_serviceConnection != null) {
-            _serviceConnection.unbindFromService();
+        if(_logic != null) {
+        	_logic.close();
         }
         
         super.onDestroy();
@@ -98,7 +70,7 @@ public class MainActivity extends Activity
 	
 	public void menuSettingsClicked(MenuItem item) {
 		Intent intent = new Intent(this, SettingsActivity.class);
-		startActivityForResult(intent, 0x0000A001);
+		startActivity(intent);
 	}
 	
 	public void menuAboutClicked(MenuItem item) {
@@ -106,246 +78,34 @@ public class MainActivity extends Activity
 		startActivity(intent);
 	}
 	
-	private boolean detectApg() {
-		Context context = getApplicationContext();
-		
-		try {
-            PackageInfo pi = context.getPackageManager().getPackageInfo("org.thialfihar.android.apg", 0);
-            if (pi.versionCode >= 16) {
-                return true;
-            } else {
-                Toast.makeText(context, getText(R.string.apt_invalid_version),Toast.LENGTH_SHORT).show();
-            }
-        } catch (NameNotFoundException e) {
-            // not found
-        }
-
-        return false;
-	}
-	
-	private boolean detectOpenPGPKeyChain() {
-		Context context = getApplicationContext();
-		
-		try {
-			PackageInfo pi = context.getPackageManager().getPackageInfo("org.sufficientlysecure.keychain", 0);
-			
-			if(pi.versionCode > 20000) {
-				return true;
-			}
-		} catch(NameNotFoundException e) {
-			// not found
-		}
-		
-		return false;
-	}
-	
-	public void actionOpenClicked(View view) {
-		_radioButtonClose.setChecked(false);
-	}
-	
-	public void actionCloseClicked(View view) {
-		_radioButtonOpen.setChecked(false);
-	}
-	
-	public void generateDatasetClicked(View view) {
-		String action;
-		
-		if(_radioButtonOpen.isChecked())
-			action = "open";
-		else
-			action = "close";
-			
-		_editTextDataset.setText(makeRequest(action));
-	}
-	
-	public void signClicked(View view) {
-		makeSignature(_editTextDataset.getText().toString());
-	}
-	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		switch(requestCode) {
-			case 0x0000A001:
-			{
-				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-				if(_expertMode != prefs.getBoolean("pref_expert",  false))
-				{
-					AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-					dialog.setMessage(getText(R.string.settings_restart_required));
-					dialog.setTitle(getText(R.string.settings_restart_required_title));
-					dialog.setPositiveButton(android.R.string.ok ,new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int whichButton) {
-								finish();
-							}
-						});
-					dialog.setCancelable(false);
-					dialog.create().show();
-				}
-				break;
-			}
-				
-			case 0x0000A002:
-				String signedData;
-				if(data != null && data.hasExtra("encryptedMessage"))
-					signedData = data.getStringExtra("encryptedMessage");
-				else
-					signedData = "";
-				
-				if(_editTextSignedData != null)
-					_editTextSignedData.setText(signedData);
-				else
-					sendToServer(signedData);
-				break;
-			
-			case 0x0000A003:
-                sendOpenKeychainIntent(data);
-                break;
-				
-			default:
-				super.onActivityResult(requestCode, resultCode, data);
-				break;
+		
+		if(requestCode > 0x0000B000 && requestCode < 0x0000C0000) {
+			_logic.postResult(requestCode - 0x0000B000, resultCode, data, _guiHelper);
+		}
+		else {
+			super.onActivityResult(requestCode, resultCode, data);
 		}									
 	}
 	
-	public void sendToServerClicked(View view) {
-		String data = _editTextSignedData.getText().toString();
-		sendToServer(data);
-	}
-	
 	public void onOpenClicked(View view) {
-		_progressBar.setVisibility(View.VISIBLE);
-		makeSignature(makeRequest("open"));
+		doAction("open");
 	}
 	
 	public void onCloseClicked(View view) {
-		_progressBar.setVisibility(View.VISIBLE);
-		makeSignature(makeRequest("close"));
+		doAction("close");
 	}
 	
-	private String makeRequest(String action) {
-		long ts = System.currentTimeMillis() / 1000;
-		return action + ":" + String.valueOf(ts);
-	}
-	
-	private void makeSignature(String signData) {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+	private void doAction(final String action) {
 		
-		String prefKey = prefs.getString("pref_key", "");
-		
-		if(!_useOpenPGPKeyChain) {			
-			Intent intent = new Intent("org.thialfihar.android.apg.intent.ENCRYPT_AND_RETURN");
-			intent.putExtra("intentVersion", 1);
-			intent.setType("text/plain");
-			intent.putExtra("text", signData);
-			intent.putExtra("ascii_armor", true);
-			
-			if(prefKey != "")
-			{
-				intent.putExtra("signatureKeyId", Long.parseLong(prefKey));
+		Thread runThread = new Thread(new Runnable() {			
+			@Override
+			public void run() {
+				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+				_logic.doActionOnServer(action, prefs.getString("pref_server", ""), prefs.getString("pref_key", ""), _guiHelper);
 			}
-			
-			startActivityForResult(intent, 0x0000A002);
-		} else {
-			Intent intent = new Intent();
-			intent.setAction(OpenPgpApi.ACTION_SIGN);
-			intent.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
-			intent.putExtra("PGPAuth_SIGNDATA", signData);
-			
-			sendOpenKeychainIntent(intent);
-		}		
-	}
-	
-	private void sendOpenKeychainIntent(Intent data)
-	{
-		InputStream is = new ByteArrayInputStream(data.getExtras().getString("PGPAuth_SIGNDATA").getBytes());
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		});
 		
-		OpenPgpApi api = new OpenPgpApi(this, _serviceConnection.getService());
-		Intent result = api.executeApi(data, is, os);
-		
-		switch (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
-	    case OpenPgpApi.RESULT_CODE_SUCCESS: {
-	    	try {
-	    		String signature = os.toString("UTF-8");
-	            
-	            if(_editTextSignedData != null)
-					_editTextSignedData.setText(signature);
-				else
-					sendToServer(signature);
-	        } catch (UnsupportedEncodingException e) {
-	            Toast.makeText(this, "UnsupportedEncodingException\n\n" + e.getMessage(), Toast.LENGTH_LONG).show();
-	        }
-	        break;
-	    }
-	    case OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED: {
-	        PendingIntent pi = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
-	        try {
-	            startIntentSenderForResult(pi.getIntentSender(), 0x0000A003, null, 0, 0, 0);
-	        } catch (IntentSender.SendIntentException e) {
-	            Toast.makeText(this, "SendIntentException\n\n" + e.getMessage(), Toast.LENGTH_LONG).show();
-	        }
-	        break;
-	    }
-	    case OpenPgpApi.RESULT_CODE_ERROR: {
-	        OpenPgpError error = result.getParcelableExtra(OpenPgpApi.RESULT_ERROR);
-	        Toast.makeText(this, error.getMessage(), Toast.LENGTH_LONG).show();
-	        break;
-	    }
-	}
-	}
-	
-	private void sendToServer(String data) {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-		String server = prefs.getString("pref_server", "");
-		
-		if(server == null || server == "" || !URLUtil.isValidUrl(server))
-		{
-			AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-			
-			if(server == null || server == "") {
-				dlg.setTitle(R.string.no_server_set_title);
-				dlg.setMessage(R.string.no_server_set);
-			}
-			else if(!URLUtil.isValidUrl(server)) {
-				dlg.setTitle(R.string.invalid_server_set_title);
-				dlg.setMessage(R.string.invalid_server_set);
-			}
-
-			dlg.setPositiveButton(android.R.string.ok,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.cancel();
-					}
-				});
-
-			dlg.create().show();
-
-			if(_progressBar != null)
-				_progressBar.setVisibility(View.INVISIBLE);
-
-			return;
-		}
-
-		String[] params = new String[]{server, data};
-
-		HttpPostTask task = new HttpPostTask();
-		try {
-			String ret = task.execute(params).get();
-			
-			if(ret == null) {
-				ret = getResources().getString(android.R.string.ok);
-			}
-			
-			Toast.makeText(getApplicationContext(), ret, Toast.LENGTH_LONG).show();
-		}
-		catch(InterruptedException e) {
-			Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
-		}
-		catch(ExecutionException e) {
-			Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
-		}
-		
-		if(_progressBar != null)
-			_progressBar.setVisibility(View.INVISIBLE);
+		runThread.start();
 	}
 }
