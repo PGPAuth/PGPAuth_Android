@@ -15,9 +15,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity
-{	
-	Logic _logic;
-	
+{
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -38,9 +36,9 @@ public class MainActivity extends Activity
 		listViewServers.setAdapter(adapter);
 		
 		try {
-			_logic = new Logic(this, prefs.getBoolean("pref_forceapg", false));
+			Logic.Logic = new Logic(this, prefs.getBoolean("pref_forceapg", false));
 			
-			Logic.GuiHelper guiHelper = _logic.new GuiHelper() {
+			Logic.GuiHelper guiHelper = Logic.Logic.new GuiHelper() {
 				public void startActivityForResult(Intent intent, int requestCode) {
 					MainActivity.this.startActivityForResult(intent, requestCode + 0x0000B000);
 				}
@@ -54,9 +52,7 @@ public class MainActivity extends Activity
 				}
 			};
 			
-			_logic.setGuiHelper(guiHelper);
-			
-			Logic.Logic = _logic;
+			Logic.Logic.setGuiHelper(guiHelper);
 		}
 		catch(Exception e) {
 			Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
@@ -69,8 +65,8 @@ public class MainActivity extends Activity
     
     @Override
     public void onDestroy() {
-        if(_logic != null) {
-        	_logic.close();
+        if(Logic.Logic != null) {
+        	Logic.Logic.close();
         }
         
         super.onDestroy();
@@ -98,16 +94,15 @@ public class MainActivity extends Activity
 		if(requestCode == 0x0000A001) {
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 			
-			if(_logic != null) {
-				_logic.close();
+			if(Logic.Logic != null) {
+				Logic.Logic.close();
 			}
 			
 			try {
-				_logic = new Logic(this, prefs.getBoolean("pref_forceapg", false));
-				Logic.Logic = _logic;
+				Logic.Logic = new Logic(this, prefs.getBoolean("pref_forceapg", false));
 			}
 			catch(Exception e) {
-				_logic = null;
+				Logic.Logic = null;
 				Intent intent = new Intent(this, SettingsActivity.class);
 				startActivityForResult(intent, 0x0000A001);
 				
@@ -115,7 +110,7 @@ public class MainActivity extends Activity
 			}
 		}
 		else if(requestCode > 0x0000B000 && requestCode < 0x0000C0000) {
-			_logic.postResult(requestCode - 0x0000B000, resultCode, data);
+			Logic.Logic.postResult(requestCode - 0x0000B000, resultCode, data);
 		}
 		else {
 			super.onActivityResult(requestCode, resultCode, data);
@@ -136,7 +131,7 @@ public class MainActivity extends Activity
 			@Override
 			public void run() {
 				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-				_logic.doActionOnServer(action, prefs.getString("pref_server", ""), prefs.getString("pref_key", ""));
+				Logic.Logic.doActionOnServer(action, prefs.getString("pref_server", ""), prefs.getString("pref_key", ""));
 			}
 		});
 		
