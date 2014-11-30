@@ -11,13 +11,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity
 {	
 	Logic _logic;
-	
-	private Logic.GuiHelper _guiHelper;
 	
     /** Called when the activity is first created. */
     @Override
@@ -29,10 +28,19 @@ public class MainActivity extends Activity
 		
 		setContentView(R.layout.activity_main);
 		
+		Server servers[] = new Server[] {
+			new Server("ChaosChemnitz", "http://door.chch.lan.ffc/cgi-bin/pgpauth_cgi"),
+			new Server("PGPAuth Testinstance", "https://lf-net.org/cgi-bin/pgpauth_cgi")
+		};
+		
+		ListView listViewServers = (ListView)findViewById(R.id.listViewServers);
+		ServerAdapter adapter = new ServerAdapter(this, R.layout.listview_item_server, servers);
+		listViewServers.setAdapter(adapter);
+		
 		try {
 			_logic = new Logic(this, prefs.getBoolean("pref_forceapg", false));
 			
-			_guiHelper = _logic.new GuiHelper() {
+			Logic.GuiHelper guiHelper = _logic.new GuiHelper() {
 				public void startActivityForResult(Intent intent, int requestCode) {
 					MainActivity.this.startActivityForResult(intent, requestCode + 0x0000B000);
 				}
@@ -45,10 +53,17 @@ public class MainActivity extends Activity
 					}
 				}
 			};
+			
+			_logic.setGuiHelper(guiHelper);
+			
+			Logic.Logic = _logic;
 		}
 		catch(Exception e) {
 			Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-			finish();
+			Intent intent = new Intent(this, SettingsActivity.class);
+			startActivityForResult(intent, 0x0000A001);
+			
+			Toast.makeText(this, "UngŸltige Einstellungen erkannt. Bitte ŸberprŸfen Sie die Einstellungen.", Toast.LENGTH_LONG).show();
 		}
     }
     
@@ -70,7 +85,7 @@ public class MainActivity extends Activity
 	
 	public void menuSettingsClicked(MenuItem item) {
 		Intent intent = new Intent(this, SettingsActivity.class);
-		startActivity(intent);
+		startActivityForResult(intent, 0x0000A001);
 	}
 	
 	public void menuAboutClicked(MenuItem item) {
@@ -80,8 +95,27 @@ public class MainActivity extends Activity
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		
-		if(requestCode > 0x0000B000 && requestCode < 0x0000C0000) {
-			_logic.postResult(requestCode - 0x0000B000, resultCode, data, _guiHelper);
+		if(requestCode == 0x0000A001) {
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+			
+			if(_logic != null) {
+				_logic.close();
+			}
+			
+			try {
+				_logic = new Logic(this, prefs.getBoolean("pref_forceapg", false));
+				Logic.Logic = _logic;
+			}
+			catch(Exception e) {
+				_logic = null;
+				Intent intent = new Intent(this, SettingsActivity.class);
+				startActivityForResult(intent, 0x0000A001);
+				
+				Toast.makeText(this, "UngŸltige Einstellungen erkannt. Bitte ŸberprŸfen Sie die Einstellungen.", Toast.LENGTH_LONG).show();
+			}
+		}
+		else if(requestCode > 0x0000B000 && requestCode < 0x0000C0000) {
+			_logic.postResult(requestCode - 0x0000B000, resultCode, data);
 		}
 		else {
 			super.onActivityResult(requestCode, resultCode, data);
@@ -102,7 +136,7 @@ public class MainActivity extends Activity
 			@Override
 			public void run() {
 				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-				_logic.doActionOnServer(action, prefs.getString("pref_server", ""), prefs.getString("pref_key", ""), _guiHelper);
+				_logic.doActionOnServer(action, prefs.getString("pref_server", ""), prefs.getString("pref_key", ""));
 			}
 		});
 		

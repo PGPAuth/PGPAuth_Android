@@ -13,9 +13,11 @@
 	<string name="pref_server_summary">URL of the CGI-program on a web-accessible location-</string>
 	<string name="pref_key">PGP-Key</string>
 	<string name="pref_key_summary">The key used for signing (APG only)</string>
+	<string name="pref_forceapg">Force APG</string>
+	<string name="pref_forceapg_summary">Use APG even when OpenKeychain is installed</string>
 	<string name="settings_title">Settings</string>
 	<string name="apg_and_opengpg_keychain_not_installed">You have neither APG nor OpenPGP Keychain installed!</string>
-	<string name="apt_invalid_version">APG version is not supported!</string>
+	<string name="apg_invalid_version">APG version is not supported!</string>
 	<string name="btn_lock">Lock</string>
 	<string name="btn_unlock">Unlock</string>
 	<string name="no_server_set_title">No server set</string>

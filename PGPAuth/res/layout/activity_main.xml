@@ -10,20 +10,6 @@
 		android:layout_width="fill_parent"
 		android:orientation="horizontal">
 
-		<Button
-		    android:layout_width="0dp"
-		    android:layout_height="wrap_content"
-		    android:layout_weight="1"
-		    android:onClick="onOpenClicked"
-		    android:text="@string/btn_unlock" />
-
-		<Button
-		    android:layout_width="0dp"
-		    android:layout_height="wrap_content"
-		    android:layout_weight="1"
-		    android:onClick="onCloseClicked"
-		    android:text="@string/btn_lock" />
-
 	</LinearLayout>
 
 	<LinearLayout
@@ -31,12 +17,13 @@
 		android:layout_width="match_parent"
 		android:orientation="horizontal">
 
-		<ProgressBar
-			android:layout_height="wrap_content"
-			android:layout_width="wrap_content"
-			android:id="@+id/easyProgressBarRunning"/>
-
 	</LinearLayout>
+
+	<ListView
+	    android:id="@+id/listViewServers"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" >
+	</ListView>
 
 </LinearLayout>
 

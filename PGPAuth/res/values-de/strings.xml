@@ -4,11 +4,11 @@
 	<string name="pref_server_summary">Webadresse des cgi-Programms.</string>
 	<string name="pref_key">PGP-Key</string>
 	<string name="pref_key_summary">Der zum Signieren zu verwendende Key (nur APG)</string>
+	<string name="pref_forceapg">APG erzwingen</string>
+	<string name="pref_forceapg_summary">Verwende APG auch wenn OpenKeychain installiert ist</string>
 	<string name="settings_title">Einstellungen</string>
 	<string name="apg_and_opengpg_keychain_not_installed">Weder APG noch OpenKeychain sind installiert!</string>
-	<string name="apt_invalid_version">
-	Die installierte APG-Version wird nicht unterstützt!
-	</string>
+	<string name="apg_invalid_version">Die installierte APG-Version wird nicht unterstützt!</string>
 	<string name="btn_lock">Zuschließen</string>
 	<string name="btn_unlock">Aufschließen</string>
 	<string name="no_server_set_title">Kein Server eingestellt</string>
@@ -16,7 +16,5 @@
 	<string name="invalid_server_set_title">Ungültiger Server eingestellt</string>
 	<string name="invalid_server_set">Der eingestellte Server scheint ungültig zu sein!</string>
 	<string name="about_title">Über PGPAuth</string>
-	<string name="about_text">
-	Diese App sendet PGP-signierte Anfragen an einen definierten Server.\nDiese Anfragen bestehen aus einer Aktion (momentan öffnen oder schließen) und einem Zeitstempel, um das Abfangen und erneute Senden der Anfrage zu unterbinden.\n\nDer Server prüft die Aktion der Anfrage, den Zeitstempel, die Gültigkeit der Signatur und die Autorisierung des verwendeten Schlüssels bis er schließlich die Aktion ausführt.
-	</string>
+	<string name="about_text">Diese App sendet PGP-signierte Anfragen an einen definierten Server.\nDiese Anfragen bestehen aus einer Aktion (momentan öffnen oder schließen) und einem Zeitstempel, um das Abfangen und erneute Senden der Anfrage zu unterbinden.\n\nDer Server prüft die Aktion der Anfrage, den Zeitstempel, die Gültigkeit der Signatur und die Autorisierung des verwendeten Schlüssels bis er schließlich die Aktion ausführt.</string>
 </resources>

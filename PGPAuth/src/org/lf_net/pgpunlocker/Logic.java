@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
+import org.lf_net.pgpunlocker.Logic.GuiHelper;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.openintents.openpgp.util.OpenPgpServiceConnection;
@@ -19,10 +20,13 @@ import android.webkit.URLUtil;
 
 public class Logic {
 	
-	OpenPgpServiceConnection _serviceConnection;
+	OpenPgpServiceConnection _serviceConnection = null;
 	Context _context;
-	String _signedData;
-	AutoResetEvent _event;
+	String _signedData = null;
+	AutoResetEvent _event = new AutoResetEvent(false);
+	GuiHelper _guiHelper;
+	
+	public static Logic Logic;
 	
 	public abstract class GuiHelper {
 		public abstract void startActivityForResult(Intent intent, int requestCode);
@@ -41,6 +45,10 @@ public class Logic {
 		    _serviceConnection.bindToService();
 		}
 		
+		if(!hasAPG && forceAPG) {
+			throw new RuntimeException((String)context.getText(R.string.apg_invalid_version));
+		}
+		
 		if(!hasAPG && !hasOpenKeychain) {
 			throw new RuntimeException((String)context.getText(R.string.apg_and_opengpg_keychain_not_installed));
 		}
@@ -49,12 +57,12 @@ public class Logic {
 	}
 	
 	public void close() {
-		if (_serviceConnection != null) {
+		if (_serviceConnection != null && _serviceConnection.isBound()) {
             _serviceConnection.unbindFromService();
         }
 	}
 	
-	public String doActionOnServer(String action, String server, String keyAPG, GuiHelper helper) {
+	public String doActionOnServer(String action, String server, String keyAPG) {
 		if(server == null || server == "" || !URLUtil.isValidUrl(server))
 		{
 			throw new IllegalArgumentException();
@@ -75,7 +83,7 @@ public class Logic {
 				intent.putExtra("signatureKeyId", Long.parseLong(keyAPG));
 			}
 			
-			helper.startActivityForResult(intent, 1);
+			_guiHelper.startActivityForResult(intent, 1);
 		}
 		else {
 			Intent intent = new Intent();
@@ -84,7 +92,7 @@ public class Logic {
 			intent.putExtra("PGPAuth_SIGNDATA", request);
 			
 			try {
-				sendOpenKeychainIntent(intent, helper);
+				sendOpenKeychainIntent(intent);
 			} catch (UnsupportedEncodingException e) {
 				return e.getLocalizedMessage();
 			}
@@ -115,9 +123,13 @@ public class Logic {
 		catch(Exception e) {
 			return e.getMessage();
 		}
+		finally {
+			_signedData = null;
+			_event.reset();
+		}
 	}
 	
-	public void postResult(int requestCode, int resultCode, Intent data, GuiHelper helper) {
+	public void postResult(int requestCode, int resultCode, Intent data) {
 		switch(requestCode) {
 			case 1:
 			{
@@ -137,13 +149,17 @@ public class Logic {
 			case 2:
 			{
 				try {
-					sendOpenKeychainIntent(data, helper);
+					sendOpenKeychainIntent(data);
 				} catch (UnsupportedEncodingException e) {
 					_signedData = null;
 					_event.set();
 				}
 			}
 		}
+	}
+	
+	public void setGuiHelper(GuiHelper guiHelper) {
+		_guiHelper = guiHelper;
 	}
 	
 	private boolean detectApg() {		
@@ -173,7 +189,7 @@ public class Logic {
 		return false;
 	}
 	
-	private void sendOpenKeychainIntent(Intent data, GuiHelper helper) throws UnsupportedEncodingException
+	private void sendOpenKeychainIntent(Intent data) throws UnsupportedEncodingException
 	{
 		InputStream is = new ByteArrayInputStream(data.getExtras().getString("PGPAuth_SIGNDATA").getBytes());
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -189,7 +205,7 @@ public class Logic {
 		    }
 		    case OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED: {
 		        PendingIntent pi = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
-		        helper.startIntentSenderForResult(pi.getIntentSender(), 2);
+		        _guiHelper.startIntentSenderForResult(pi.getIntentSender(), 2);
 		        break;
 		    }
 		    case OpenPgpApi.RESULT_CODE_ERROR: {
