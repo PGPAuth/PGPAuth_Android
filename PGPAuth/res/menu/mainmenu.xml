@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     
-    <item
+    <item android:id="@+id/menuItemAddServer" android:showAsAction="always" android:title="Add Server" android:onClick="menuAddServerClicked"></item><item
         android:id="@+id/menuItemSettings"
         android:title="@string/settings_title"
 		android:onClick="menuSettingsClicked" />
@@ -9,5 +9,6 @@
         android:id="@+id/menuItemAbout"
         android:title="@string/about_title"
         android:onClick="menuAboutClicked" />
+    
     
 </menu>

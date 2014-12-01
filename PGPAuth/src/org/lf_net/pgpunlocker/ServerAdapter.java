@@ -2,6 +2,7 @@ package org.lf_net.pgpunlocker;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,14 +14,24 @@ import android.widget.TextView;
 public class ServerAdapter extends ArrayAdapter<Server> {
 	Context _context;
 	int _layoutResourceId;
-	Server _data[] = null;
 	
-	public ServerAdapter(Context context, int layoutResourceId, Server[] data) {
-		super(context, layoutResourceId, data);
+	public ServerAdapter(Context context, int layoutResourceId) {
+		super(context, layoutResourceId);
 		
 		_context = context;
 		_layoutResourceId = layoutResourceId;
-		_data = data;
+		
+		ServerManager.setObserver(new ServerManager.ServerManagerObserver() {
+			@Override
+			public void onSomethingChanged() {
+				ServerAdapter.this.notifyDataSetChanged();
+			}
+		});
+	}
+	
+	@Override
+	public int getCount() {
+		return ServerManager.count();
 	}
 	
 	@Override
@@ -39,16 +50,19 @@ public class ServerAdapter extends ArrayAdapter<Server> {
 			holder.unlockButton = (Button)row.findViewById(R.id.buttonUnlock);
 			
 			row.setTag(holder);
+			row.setClickable(true);
+			row.setLongClickable(true);
 		}
 		else {
 			holder = (ServerHolder)row.getTag();
 		}
 		
-		Server server = _data[position];
+		Server server = ServerManager.serverAtIndex(position);
 		holder.nameView.setText(server.name());
 		holder.urlView.setText(server.url());
 		holder.lockButton.setTag(server);
 		holder.unlockButton.setTag(server);
+		holder.index = position;
 		
 		holder.lockButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -66,6 +80,17 @@ public class ServerAdapter extends ArrayAdapter<Server> {
 			}
 		});
 		
+		row.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ServerHolder holder = (ServerHolder)v.getTag();
+				
+				Intent i = new Intent(_context, ServerEditActivity.class);
+				i.putExtra("ServerIndex", holder.index);
+				_context.startActivity(i);
+			}
+		});
+		
 		return row;
 	}
 	
@@ -75,5 +100,7 @@ public class ServerAdapter extends ArrayAdapter<Server> {
 		TextView urlView;
 		Button lockButton;
 		Button unlockButton;
+		
+		int index;
 	}
 }

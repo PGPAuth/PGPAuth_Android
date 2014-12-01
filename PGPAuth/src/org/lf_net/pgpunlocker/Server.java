@@ -26,4 +26,40 @@ public class Server {
 	public String apgKey() {
 		return _apgKey;
 	}
+	
+	public void setName(String name) {
+		_name = name;
+	}
+	
+	public void setUrl(String url) {
+		_url = url;
+	}
+	
+	public void setApgKey(String apgKey) {
+		_apgKey = apgKey;
+	}
+	
+	public String serialize() {
+		String serialized = _name + "\t" + _url;
+		
+		if(_apgKey != null && _apgKey.length() > 0) {
+			serialized += "\t" + _apgKey;
+		}
+		
+		return serialized;
+	}
+	
+	public static Server deserialize(String serialized) {
+		String[] parts = serialized.split("\t");
+		
+		if(parts.length == 2) {
+			return new Server(parts[0], parts[1]);
+		}
+		
+		if(parts.length == 3) {
+			return new Server(parts[0], parts[1], parts[2]);
+		}
+		
+		return null;
+	}
 }

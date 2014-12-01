@@ -7,10 +7,13 @@ import android.content.IntentSender.SendIntentException;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,18 +25,17 @@ public class MainActivity extends Activity
 	{
         super.onCreate(savedInstanceState);
 		
+        ServerManager.loadFromFile(this);
+        
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		
 		setContentView(R.layout.activity_main);
 		
-		Server servers[] = new Server[] {
-			new Server("ChaosChemnitz", "http://door.chch.lan.ffc/cgi-bin/pgpauth_cgi"),
-			new Server("PGPAuth Testinstance", "https://lf-net.org/cgi-bin/pgpauth_cgi")
-		};
-		
 		ListView listViewServers = (ListView)findViewById(R.id.listViewServers);
-		ServerAdapter adapter = new ServerAdapter(this, R.layout.listview_item_server, servers);
+		ServerAdapter adapter = new ServerAdapter(this, R.layout.listview_item_server);
 		listViewServers.setAdapter(adapter);
+		
+		registerForContextMenu(listViewServers);
 		
 		try {
 			Logic.Logic = new Logic(this, prefs.getBoolean("pref_forceapg", false));
@@ -69,9 +71,35 @@ public class MainActivity extends Activity
         	Logic.Logic.close();
         }
         
+        ServerManager.saveToFile(this);
+        
         super.onDestroy();
     }
 	
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo info) {
+    	super.onCreateContextMenu(menu, v, info);
+    	
+    	if(v == findViewById(R.id.listViewServers)) {
+	    	AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo)info;
+	    	int index = menuInfo.position;
+	    	
+	    	Intent editIntent = new Intent(this, ServerEditActivity.class);
+			editIntent.putExtra("ServerIndex", index);
+	    	
+			Intent deleteIntent = new Intent(this, ServerDeleteActivity.class);
+			deleteIntent.putExtra("ServerIndex", index);
+			
+			menu.setHeaderTitle("Choose action");
+			
+	    	MenuItem editItem = menu.add(0, v.getId(), 0, "Edit");
+	    	editItem.setIntent(editIntent);
+	    	
+	    	MenuItem deleteItem = menu.add(0, v.getId(), 1, "Delete");
+	    	deleteItem.setIntent(deleteIntent);
+    	}
+    }
+    
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -86,6 +114,14 @@ public class MainActivity extends Activity
 	
 	public void menuAboutClicked(MenuItem item) {
 		Intent intent = new Intent(this, AboutActivity.class);
+		startActivity(intent);
+	}
+	
+	public void menuAddServerClicked(MenuItem item) {
+		ServerManager.addServer();
+		
+		Intent intent = new Intent(this, ServerEditActivity.class);
+		intent.putExtra("ServerIndex", ServerManager.count() - 1);
 		startActivity(intent);
 	}
 	
