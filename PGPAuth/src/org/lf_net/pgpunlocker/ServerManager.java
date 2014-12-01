@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 public class ServerManager {
 	static public class ServerManagerObserver {
@@ -60,7 +62,18 @@ public class ServerManager {
 				_observer.onSomethingChanged();
 			}
 			
-		} catch (Exception e) {
+		}
+		catch (FileNotFoundException e) {
+			// maybe there was an older version of PGPAuth installed ...
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+			String server = prefs.getString("pref_server", "");
+			
+			if(server != "") {
+				// there was an old version \o/
+				_servers.add(new Server("Migrated from old version", server));
+			}
+		}
+		catch (Exception e) {
 			// shit happens
 		}
 	}
