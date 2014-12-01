@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     
-    <item android:id="@+id/menuItemAddServer" android:showAsAction="always" android:title="Add Server" android:onClick="menuAddServerClicked"></item><item
+    <item android:id="@+id/menuItemAddServer" android:showAsAction="always" android:title="@string/action_new_server" android:onClick="menuAddServerClicked"></item><item
         android:id="@+id/menuItemSettings"
         android:title="@string/settings_title"
 		android:onClick="menuSettingsClicked" />
