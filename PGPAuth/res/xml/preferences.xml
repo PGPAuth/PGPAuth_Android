@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <EditTextPreference
-        android:key="pref_server"
-        android:title="@string/pref_server"
-        android:summary="@string/pref_server_summary"
-        android:defaultValue="" />
-    <org.lf_net.pgpunlocker.PGPKeyPreference
-	    android:key="pref_key"
-	    android:title="@string/pref_key"
-	    android:summary="@string/pref_key_summary"
-	    android:defaultValue="" />
     <CheckBoxPreference
         android:key="pref_forceapg"
         android:title="@string/pref_forceapg"

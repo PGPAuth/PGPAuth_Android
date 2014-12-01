@@ -67,16 +67,32 @@ public class ServerAdapter extends ArrayAdapter<Server> {
 		holder.lockButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Server server = (Server)v.getTag();
-				Logic.Logic.doActionOnServer("close", server.url(), server.apgKey());
+				final Server server = (Server)v.getTag();
+				
+				Thread runThread = new Thread(new Runnable() {			
+					@Override
+					public void run() {
+						Logic.Logic.doActionOnServer("close", server.url(), server.apgKey());
+					}
+				});
+				
+				runThread.start();
 			}
 		});
 		
 		holder.unlockButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Server server = (Server)v.getTag();
-				Logic.Logic.doActionOnServer("open", server.url(), server.apgKey());
+				final Server server = (Server)v.getTag();
+				
+				Thread runThread = new Thread(new Runnable() {			
+					@Override
+					public void run() {
+						Logic.Logic.doActionOnServer("open", server.url(), server.apgKey());
+					}
+				});
+				
+				runThread.start();
 			}
 		});
 		

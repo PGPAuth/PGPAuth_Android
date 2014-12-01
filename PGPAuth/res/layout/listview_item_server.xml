@@ -2,10 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:baselineAligned="false" >
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="0.8"
         android:orientation="vertical" >
@@ -15,7 +16,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:text="ChaosChemnitz"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
@@ -23,9 +23,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:ellipsize="marquee"
             android:maxLines="1"
-            android:text="http://door.chch.lan.ffc/cgi-bin/pgpauth_cgi"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
     </LinearLayout>
@@ -38,13 +38,13 @@
             android:id="@+id/buttonLock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lock" />
+            android:text="@string/btn_lock" />
 
         <Button
             android:id="@+id/buttonUnlock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Unlock" />
+            android:text="@string/btn_unlock" />
 
     </LinearLayout>
 

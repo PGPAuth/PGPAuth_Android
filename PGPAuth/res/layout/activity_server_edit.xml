@@ -14,7 +14,7 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name:" />
+        android:text="@string/name_input" />
 
     <EditText
         android:id="@+id/editTextName"
@@ -30,7 +30,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="URL:" />
+        android:text="@string/url_input" />
 
     <EditText
         android:id="@+id/editTextURL"
@@ -43,7 +43,7 @@
         android:id="@+id/button1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Save"
+        android:text="@android:string/ok"
         android:onClick="saveClicked" />
 
 </LinearLayout>

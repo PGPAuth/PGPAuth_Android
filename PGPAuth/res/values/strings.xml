@@ -7,28 +7,43 @@
     <string name="button_googlePlus" translatable="false">Google+</string>
     <string name="button_twitter" translatable="false">Twitter</string>
     <string name="button_facebook" translatable="false">Facebook</string>
-
-    <!-- default string from english language file -->
-    <string name="pref_server">Serveraddress</string>
-    <string name="pref_server_summary">URL of the CGI-program on a web-accessible location-</string>
+    
+    <!-- maybe this will be used again... -->
     <string name="pref_key">PGP-Key</string>
     <string name="pref_key_summary">The key used for signing (APG only)</string>
+    
     <string name="pref_forceapg">Force APG</string>
     <string name="pref_forceapg_summary">Use APG even when OpenKeychain is installed</string>
+    
+    <!-- Activity titles -->
     <string name="settings_title">Settings</string>
+    <string name="title_activity_server_delete">Delete Server</string>
+    <string name="about_title">About PGPAuth</string>
+    <string name="title_activity_server_edit">Edit Server</string>
+    
+    <!-- Menu items -->
+    <string name="contextmenu_title">Choose action</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_new_server">New Server</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_edit">Edit</string>
+    
+    <!-- Error strings -->
     <string name="apg_and_opengpg_keychain_not_installed">You have neither APG nor OpenPGP Keychain installed!</string>
     <string name="apg_invalid_version">APG version is not supported!</string>
+    <string name="apg_forced_but_not_installed">You cannot force APG when it is not installed &#8230;</string>
+    
+    <string name="no_server_set">Please set a server!</string>
+    <string name="invalid_server_set">Your configured server-URL seems to be invalid!</string>
+    <string name="unknown_error">Unknown error!</string>
+    <string name="invalid_settings_detected">Invalid settings detected. Please check the preferences.</string>
+    
+    <!-- UI elements -->
     <string name="btn_lock">Lock</string>
     <string name="btn_unlock">Unlock</string>
-    <string name="no_server_set_title">No server set</string>
-    <string name="no_server_set">Please set a server!</string>
-    <string name="invalid_server_set_title">Invalid server set</string>
-    <string name="invalid_server_set">Your configured server-URL seems to be invalid!</string>
-    <string name="about_title">About PGPAuth</string>
+    <string name="server_delete_warning">This cannot be undone!</string>
+    <string name="name_input">Name:</string>
+    <string name="url_input">URL:</string>
+    
     <string name="about_text">This app sends PGP-signed requests to an defined server.\nThe requests contains an action (currently open or close) and a timestamp, to protect against replay-attacks.\n\nThe server then checks the action, the timestamp, the validity of the signature and the autorization of the used key. After all these checks, the action is done by the server.</string>
-    <string name="title_activity_server_edit">Edit Server</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_server_delete">Delete Server</string>
-
 </resources>

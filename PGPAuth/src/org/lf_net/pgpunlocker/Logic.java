@@ -5,7 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
-import org.lf_net.pgpunlocker.Logic.GuiHelper;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.openintents.openpgp.util.OpenPgpServiceConnection;
@@ -46,7 +45,7 @@ public class Logic {
 		}
 		
 		if(!hasAPG && forceAPG) {
-			throw new RuntimeException((String)context.getText(R.string.apg_invalid_version));
+			throw new RuntimeException((String)context.getText(R.string.apg_forced_but_not_installed));
 		}
 		
 		if(!hasAPG && !hasOpenKeychain) {
@@ -63,9 +62,19 @@ public class Logic {
 	}
 	
 	public String doActionOnServer(String action, String server, String keyAPG) {
-		if(server == null || server == "" || !URLUtil.isValidUrl(server))
+		if(server == "" || !URLUtil.isValidUrl(server))
 		{
-			throw new IllegalArgumentException();
+			if(server == "") {
+				return _context.getString(R.string.no_server_set);
+			}
+			
+			else if(!URLUtil.isValidUrl(server)) {
+				return _context.getString(R.string.invalid_server_set);
+			}
+			
+			else {
+				return _context.getString(R.string.unknown_error);
+			}
 		}
 		
 		long timestamp = System.currentTimeMillis() / 1000;
@@ -105,7 +114,7 @@ public class Logic {
 		}
 		
 		if(_signedData == null) {
-			return "Unknown error while signing the request!";
+			return _context.getString(R.string.unknown_error);
 		}
 		
 		String[] params = new String[]{server, _signedData};
@@ -154,6 +163,7 @@ public class Logic {
 					_signedData = null;
 					_event.set();
 				}
+				break;
 			}
 		}
 	}

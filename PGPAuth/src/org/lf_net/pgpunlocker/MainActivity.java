@@ -61,7 +61,7 @@ public class MainActivity extends Activity
 			Intent intent = new Intent(this, SettingsActivity.class);
 			startActivityForResult(intent, 0x0000A001);
 			
-			Toast.makeText(this, "UngŸltige Einstellungen erkannt. Bitte ŸberprŸfen Sie die Einstellungen.", Toast.LENGTH_LONG).show();
+			Toast.makeText(this, R.string.invalid_settings_detected, Toast.LENGTH_LONG).show();
 		}
     }
     
@@ -90,12 +90,12 @@ public class MainActivity extends Activity
 			Intent deleteIntent = new Intent(this, ServerDeleteActivity.class);
 			deleteIntent.putExtra("ServerIndex", index);
 			
-			menu.setHeaderTitle("Choose action");
+			menu.setHeaderTitle(R.string.contextmenu_title);
 			
-	    	MenuItem editItem = menu.add(0, v.getId(), 0, "Edit");
+	    	MenuItem editItem = menu.add(0, v.getId(), 0, R.string.action_edit);
 	    	editItem.setIntent(editIntent);
 	    	
-	    	MenuItem deleteItem = menu.add(0, v.getId(), 1, "Delete");
+	    	MenuItem deleteItem = menu.add(0, v.getId(), 1, R.string.action_delete);
 	    	deleteItem.setIntent(deleteIntent);
     	}
     }
@@ -142,7 +142,7 @@ public class MainActivity extends Activity
 				Intent intent = new Intent(this, SettingsActivity.class);
 				startActivityForResult(intent, 0x0000A001);
 				
-				Toast.makeText(this, "UngŸltige Einstellungen erkannt. Bitte ŸberprŸfen Sie die Einstellungen.", Toast.LENGTH_LONG).show();
+				Toast.makeText(this, R.string.invalid_settings_detected, Toast.LENGTH_LONG).show();
 			}
 		}
 		else if(requestCode > 0x0000B000 && requestCode < 0x0000C0000) {
@@ -151,26 +151,5 @@ public class MainActivity extends Activity
 		else {
 			super.onActivityResult(requestCode, resultCode, data);
 		}									
-	}
-	
-	public void onOpenClicked(View view) {
-		doAction("open");
-	}
-	
-	public void onCloseClicked(View view) {
-		doAction("close");
-	}
-	
-	private void doAction(final String action) {
-		
-		Thread runThread = new Thread(new Runnable() {			
-			@Override
-			public void run() {
-				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-				Logic.Logic.doActionOnServer(action, prefs.getString("pref_server", ""), prefs.getString("pref_key", ""));
-			}
-		});
-		
-		runThread.start();
 	}
 }
