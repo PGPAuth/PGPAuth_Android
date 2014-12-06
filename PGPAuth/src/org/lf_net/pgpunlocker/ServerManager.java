@@ -4,6 +4,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -26,7 +29,8 @@ public class ServerManager {
 	private static List<Server> _servers = new ArrayList<Server>();
 	private static ServerManagerObserver _observer;
 	
-	public static void loadFromFile(Context context) {
+	@SuppressWarnings("deprecation")
+	public static void loadFromFileOld(Context context) {
 		try {
 			_servers.clear();
 			
@@ -64,7 +68,7 @@ public class ServerManager {
 			
 		}
 		catch (FileNotFoundException e) {
-			// maybe there was an older version of PGPAuth installed ...
+			// maybe there was an even older version of PGPAuth installed ...
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 			String server = prefs.getString("pref_server", "");
 			
@@ -78,25 +82,61 @@ public class ServerManager {
 		}
 	}
 	
-	public static void saveToFile(Context context) {
-		FileOutputStream fileStream;
+	public static void loadFromFile(Context context) {
 		try {
-			fileStream = context.openFileOutput("Servers", Context.MODE_PRIVATE);
-			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fileStream));
+			_servers.clear();
 			
-			for(int i = 0; i < _servers.size(); i++) {
-				String line = _servers.get(i).serialize();
-				writer.write(line);
+			FileInputStream fileStream = context.openFileInput("Servers.json");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(fileStream));
+			
+			String jsonString = "";
+			while(reader.ready()) {
+				jsonString += reader.readLine() + "\n";
+			}
+			
+			JSONObject obj = new JSONObject(jsonString);
+			JSONArray serverArray = obj.getJSONArray("servers");
+			
+			for(int i = 0; i < serverArray.length(); i++) {
+				Server server = Server.deserializeJSON(serverArray.optJSONObject(i));
 				
-				if(i < _servers.size() - 1) {
-					writer.newLine();
+				if(server != null) {
+					_servers.add(server);
 				}
 			}
 			
-			writer.close();
-			fileStream.close();
+			reader.close();
 			
-		} catch (Exception e) {
+		} catch (FileNotFoundException e) {
+			// old PGPAuth?
+			loadFromFileOld(context);
+		} catch(Exception e) {
+			// a lot of shit happens
+		}
+		
+	}
+	
+	public static void saveToFile(Context context) {
+		try {
+			FileOutputStream fileStream = context.openFileOutput("Servers.json", Context.MODE_PRIVATE);
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fileStream));
+			
+			JSONArray serversArray = new JSONArray();
+			
+			for(int i = 0; i < _servers.size(); i++) {
+				serversArray.put(i, _servers.get(i).serializeJSON());
+			}
+			
+			JSONObject rootObject = new JSONObject();
+			rootObject.put("servers", serversArray);
+			
+			writer.write(rootObject.toString());
+			
+			writer.close();
+			
+			// delete old Servers-config - just in case it existed.
+			context.deleteFile("Servers");
+		} catch(Exception e) {
 			// more shit happens
 		}
 	}

@@ -1,5 +1,8 @@
 package org.lf_net.pgpunlocker;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Server {
 	String _name;
 	String _url;
@@ -39,16 +42,7 @@ public class Server {
 		_apgKey = apgKey;
 	}
 	
-	public String serialize() {
-		String serialized = _name + "\t" + _url;
-		
-		if(_apgKey != null && _apgKey.length() > 0) {
-			serialized += "\t" + _apgKey;
-		}
-		
-		return serialized;
-	}
-	
+	@Deprecated
 	public static Server deserialize(String serialized) {
 		String[] parts = serialized.split("\t");
 		
@@ -61,5 +55,33 @@ public class Server {
 		}
 		
 		return null;
+	}
+	
+	public JSONObject serializeJSON() {
+		JSONObject ret = new JSONObject();
+		
+		try {
+			ret.put("name", _name);
+			ret.put("url", _url);
+			ret.put("apgKey", _apgKey);
+		} catch (JSONException e) {
+			// should not happen as we just serialize a bunch of strings
+			return null;
+		}
+		
+		return ret;
+	}
+	
+	public static Server deserializeJSON(JSONObject obj) throws JSONException {
+		try {
+			String name = obj.getString("name");
+			String url = obj.getString("url");
+			String apgKey = obj.getString("apgKey");
+			
+			return new Server(name, url, apgKey);
+		} catch (JSONException e) {
+			// should not happen as we just serialize a bunch of strings
+			throw e;
+		}
 	}
 }
