@@ -52,6 +52,14 @@ public class MainActivity extends Activity
 						// just fuck you
 					}
 				}
+				
+				public void showUserFeedback(final String feedback) {
+					runOnUiThread(new Runnable() {
+						public void run() {
+							Toast.makeText(MainActivity.this, feedback, Toast.LENGTH_LONG).show();
+						}
+					});
+				}
 			};
 			
 			Logic.Logic.setGuiHelper(guiHelper);

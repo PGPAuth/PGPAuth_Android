@@ -3,6 +3,7 @@ package org.lf_net.pgpunlocker;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ServerAdapter extends ArrayAdapter<Server> {
 	Context _context;
@@ -72,7 +74,7 @@ public class ServerAdapter extends ArrayAdapter<Server> {
 				Thread runThread = new Thread(new Runnable() {			
 					@Override
 					public void run() {
-						Logic.Logic.doActionOnServer("close", server.url(), server.apgKey());
+						Logic.Logic.doActionOnServerWithFeedback("close", server.url(), server.apgKey());
 					}
 				});
 				
@@ -88,7 +90,7 @@ public class ServerAdapter extends ArrayAdapter<Server> {
 				Thread runThread = new Thread(new Runnable() {			
 					@Override
 					public void run() {
-						Logic.Logic.doActionOnServer("open", server.url(), server.apgKey());
+						Logic.Logic.doActionOnServerWithFeedback("open", server.url(), server.apgKey());
 					}
 				});
 				

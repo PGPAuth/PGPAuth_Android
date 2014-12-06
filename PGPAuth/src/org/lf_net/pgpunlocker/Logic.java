@@ -3,7 +3,6 @@ package org.lf_net.pgpunlocker;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.util.OpenPgpApi;
@@ -31,6 +30,8 @@ public class Logic {
 		public abstract void startActivityForResult(Intent intent, int requestCode);
 		
 		public abstract void startIntentSenderForResult(IntentSender intentSender, int requestCode);
+		
+		public abstract void showUserFeedback(String feedback);
 	}
 	
 	public Logic(Context context, boolean forceAPG) {
@@ -59,6 +60,11 @@ public class Logic {
 		if (_serviceConnection != null && _serviceConnection.isBound()) {
             _serviceConnection.unbindFromService();
         }
+	}
+	
+	public void doActionOnServerWithFeedback(String action, String server, String keyAPG) {
+		String ret = doActionOnServer(action, server, keyAPG);
+		_guiHelper.showUserFeedback(ret);
 	}
 	
 	public String doActionOnServer(String action, String server, String keyAPG) {
@@ -102,7 +108,7 @@ public class Logic {
 			
 			try {
 				sendOpenKeychainIntent(intent);
-			} catch (UnsupportedEncodingException e) {
+			} catch (Exception e) {
 				return e.getLocalizedMessage();
 			}
 		}
@@ -159,7 +165,7 @@ public class Logic {
 			{
 				try {
 					sendOpenKeychainIntent(data);
-				} catch (UnsupportedEncodingException e) {
+				} catch (Exception e) {
 					_signedData = null;
 					_event.set();
 				}
@@ -199,7 +205,7 @@ public class Logic {
 		return false;
 	}
 	
-	private void sendOpenKeychainIntent(Intent data) throws UnsupportedEncodingException
+	private void sendOpenKeychainIntent(Intent data) throws Exception
 	{
 		InputStream is = new ByteArrayInputStream(data.getExtras().getString("PGPAuth_SIGNDATA").getBytes());
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
