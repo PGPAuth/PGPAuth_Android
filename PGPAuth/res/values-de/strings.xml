@@ -16,6 +16,7 @@
   <string name="action_new_server">Server hinzufügen</string>
   <string name="action_delete">Löschen</string>
   <string name="action_edit">Bearbeiten</string>
+  <string name="action_share">Teilen</string>
   <!--Error strings-->
   <string name="apg_and_opengpg_keychain_not_installed">Weder APG noch OpenKeychain sind installiert!</string>
   <string name="apg_invalid_version">APG-Version wird nicht unterstützt!</string>

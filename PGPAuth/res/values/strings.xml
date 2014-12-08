@@ -27,6 +27,7 @@
     <string name="action_new_server">New Server</string>
     <string name="action_delete">Delete</string>
     <string name="action_edit">Edit</string>
+    <string name="action_share">Share</string>
     
     <!-- Error strings -->
     <string name="apg_and_opengpg_keychain_not_installed">You have neither APG nor OpenPGP Keychain installed!</string>

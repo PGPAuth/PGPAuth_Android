@@ -21,6 +21,7 @@ public class ServerDeleteActivity extends Activity {
 	
 	public void onDeleteClicked(View view) {
 		ServerManager.deleteServer(_serverIndex);
+		ServerManager.saveToFile(this);
 		finish();
 	}
 	

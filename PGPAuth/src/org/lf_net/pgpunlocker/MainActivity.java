@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.IntentSender.SendIntentException;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.ContextMenu;
@@ -26,6 +27,14 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
 		
         ServerManager.loadFromFile(this);
+        
+        Uri serverConfig = getIntent().getData();
+        
+        if(serverConfig != null) {
+        	Intent intent = new Intent(this, ServerEditActivity.class);
+        	intent.setData(serverConfig);
+    		startActivity(intent);
+        }
         
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		
@@ -98,6 +107,10 @@ public class MainActivity extends Activity
 			Intent deleteIntent = new Intent(this, ServerDeleteActivity.class);
 			deleteIntent.putExtra("ServerIndex", index);
 			
+			Intent shareIntent = new Intent(Intent.ACTION_SEND);
+			shareIntent.putExtra(Intent.EXTRA_TEXT, ServerManager.serverAtIndex(index).serializeForURL());
+			shareIntent.setType("text/plain");
+			
 			menu.setHeaderTitle(R.string.contextmenu_title);
 			
 	    	MenuItem editItem = menu.add(0, v.getId(), 0, R.string.action_edit);
@@ -105,6 +118,9 @@ public class MainActivity extends Activity
 	    	
 	    	MenuItem deleteItem = menu.add(0, v.getId(), 1, R.string.action_delete);
 	    	deleteItem.setIntent(deleteIntent);
+	    	
+	    	MenuItem shareItem = menu.add(0, v.getId(), 2, R.string.action_share);
+	    	shareItem.setIntent(Intent.createChooser(shareIntent, getText(R.string.action_share)));
     	}
     }
     

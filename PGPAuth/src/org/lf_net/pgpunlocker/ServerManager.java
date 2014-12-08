@@ -100,7 +100,7 @@ public class ServerManager {
 			for(int i = 0; i < serverArray.length(); i++) {
 				Server server = Server.deserializeJSON(serverArray.optJSONObject(i));
 				
-				if(server != null) {
+				if(server != null && !server.isEmpty()) {
 					_servers.add(server);
 				}
 			}

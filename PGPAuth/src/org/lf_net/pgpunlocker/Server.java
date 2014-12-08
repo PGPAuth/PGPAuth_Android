@@ -1,9 +1,14 @@
 package org.lf_net.pgpunlocker;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Server {
+	final static String ServerConfigBaseURL = "https://pgpauth.lf-net.org/serverConfig?config=";
+	
 	String _name;
 	String _url;
 	String _apgKey;
@@ -40,6 +45,10 @@ public class Server {
 	
 	public void setApgKey(String apgKey) {
 		_apgKey = apgKey;
+	}
+	
+	public boolean isEmpty() {
+		return _name == "" && _url == "";
 	}
 	
 	@Deprecated
@@ -82,6 +91,38 @@ public class Server {
 		} catch (JSONException e) {
 			// should not happen as we just serialize a bunch of strings
 			throw e;
+		}
+	}
+	
+	public String serializeForURL() {
+		JSONObject ret = new JSONObject();
+		
+		try {
+			ret.put("name", _name);
+			ret.put("url", _url);
+			
+			String jsonString = ret.toString();
+			String encoded = URLEncoder.encode(jsonString, "utf-8");
+			
+			return ServerConfigBaseURL + encoded;
+		} catch(Exception e) {
+			return null;
+		}
+	}
+	
+	public static Server deserializeFromURL(String configUrl) {
+		try {
+			String encoded = configUrl.substring(ServerConfigBaseURL.length());
+			String jsonString = URLDecoder.decode(encoded, "utf-8");
+			
+			JSONObject obj = new JSONObject(jsonString);
+			
+			String name = obj.getString("name");
+			String url = obj.getString("url");
+			
+			return new Server(name, url);
+		} catch(Exception e) {
+			return null;
 		}
 	}
 }
