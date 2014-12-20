@@ -26,8 +26,8 @@
   <string name="unknown_error">Unbekannter Fehler!</string>
   <string name="invalid_settings_detected">Ungültige Einstellungen erkannt! Bitte Einstellungen überprüfen.</string>
   <!--UI elements-->
-  <string name="btn_lock">Öffnen</string>
-  <string name="btn_unlock">Schließen</string>
+  <string name="btn_lock">Schließen</string>
+  <string name="btn_unlock">Öffnen</string>
   <string name="server_delete_warning">Dies kann nicht rückgängig gemacht werden!</string>
   <string name="name_input">Name:</string>
   <string name="url_input">Adresse:</string>
