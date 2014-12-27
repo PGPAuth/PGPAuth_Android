@@ -3,7 +3,16 @@ package org.lf_net.pgpunlocker;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.openintents.openpgp.util.OpenPgpServiceConnection;
@@ -123,17 +132,21 @@ public class Logic {
 			return _context.getString(R.string.unknown_error);
 		}
 		
-		String[] params = new String[]{server, _signedData};
-		
-		HttpPostTask task = new HttpPostTask();
 		try {
-			String ret = task.execute(params).get();
+			HttpClient client = new DefaultHttpClient();
+			HttpPost req = new HttpPost(server);
+			List<NameValuePair> httpParams = new ArrayList<NameValuePair>();
+			httpParams.add(new BasicNameValuePair("data", _signedData));
+			req.setEntity(new UrlEncodedFormEntity(httpParams));
+
+			HttpResponse response = client.execute(req);
 			
-			if(ret == null) {
-				ret = _context.getResources().getString(android.R.string.ok);
+			if(response.getStatusLine().getStatusCode() != 200) {
+				return response.getStatusLine().getStatusCode() + " " + response.getStatusLine().getReasonPhrase();
 			}
-			
-			return ret;
+			else {
+				return _context.getResources().getString(android.R.string.ok);
+			}
 		}
 		catch(Exception e) {
 			return e.getMessage();

@@ -131,22 +131,35 @@ public class MainActivity extends Activity
 		return true;
 	}
 	
-	public void menuSettingsClicked(MenuItem item) {
-		Intent intent = new Intent(this, SettingsActivity.class);
-		startActivityForResult(intent, 0x0000A001);
-	}
-	
-	public void menuAboutClicked(MenuItem item) {
-		Intent intent = new Intent(this, AboutActivity.class);
-		startActivity(intent);
-	}
-	
-	public void menuAddServerClicked(MenuItem item) {
-		ServerManager.addServer();
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {
+			case R.id.menuItemAbout:
+			{
+				Intent intent = new Intent(this, AboutActivity.class);
+				startActivity(intent);
+				break;
+			}
+			case R.id.menuItemAddServer:
+			{
+				ServerManager.addServer();
+				
+				Intent intent = new Intent(this, ServerEditActivity.class);
+				intent.putExtra("ServerIndex", ServerManager.count() - 1);
+				startActivity(intent);
+				break;
+			}
+			case R.id.menuItemSettings:
+			{
+				Intent intent = new Intent(this, SettingsActivity.class);
+				startActivityForResult(intent, 0x0000A001);
+				break;
+			}
+			default:
+				return false;
+		}
 		
-		Intent intent = new Intent(this, ServerEditActivity.class);
-		intent.putExtra("ServerIndex", ServerManager.count() - 1);
-		startActivity(intent);
+		return true;
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
