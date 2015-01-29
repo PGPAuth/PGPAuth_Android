@@ -12,7 +12,7 @@ Then you can check if the signature is valid, the signature key is authorised an
 When everything is checked, you will have to extract the request from the message and do something with it.
 
 You can use PGPAuth_CGI to handle requests:
-https://github.com/LittleFox94/PGPAuth_CGI/
+https://github.com/PGPAuth/PGPAuth_CGI
 
 ## How can I help?
 You can use it and provide feedback if you wish a feature or catched a bug.
