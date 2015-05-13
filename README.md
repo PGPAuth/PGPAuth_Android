@@ -1,4 +1,5 @@
 # PGPAuth
+[![GitHub version](https://badge.fury.io/gh/PGPAuth%2FPGPAuth_Android.svg)](http://badge.fury.io/gh/PGPAuth%2FPGPAuth_Android)
 
 ## What is it?
 It is an App to send a PGP-signed request to a server to open or close $things.
