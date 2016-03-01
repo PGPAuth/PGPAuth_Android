@@ -1,5 +1,5 @@
 # PGPAuth
-[![GitHub version](https://badge.fury.io/gh/PGPAuth%2FPGPAuth_Android.svg)](http://badge.fury.io/gh/PGPAuth%2FPGPAuth_Android) [![Build Status](https://praios.lf-net.org/jenkins/buildStatus/icon?job=PGPAuth_Android&build=28)](https://praios.lf-net.org/jenkins/job/PGPAuth_Android/28/)
+[![GitHub version](https://badge.fury.io/gh/PGPAuth%2FPGPAuth_Android.svg)](http://badge.fury.io/gh/PGPAuth%2FPGPAuth_Android) [![Build Status](https://praios.lf-net.org/jenkins/buildStatus/icon?job=PGPAuth_Android)](https://praios.lf-net.org/jenkins/job/PGPAuth_Android)
 
 ## What is it?
 It is an App to send a PGP-signed request to a server to open or close $things.
