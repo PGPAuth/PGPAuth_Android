@@ -1,0 +1,9 @@
+[main]
+host = https://www.transifex.com
+
+[pgpauth.Strings]
+file_filter = PGPAuth/res/values-<lang>/strings.xml
+source_file = PGPAuth/res/values/strings.xml
+source_lang = en
+type = Android
+
