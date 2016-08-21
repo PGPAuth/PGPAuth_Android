@@ -1,9 +1,0 @@
-/.metadata
-.DS_Store
-.idea
-.settings
-bin/
-gen/
-out/
-*.iml
-*.jar
