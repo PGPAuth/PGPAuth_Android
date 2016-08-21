@@ -35,3 +35,6 @@ local.properties
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# language-specific strings (managed by transifex)
+PGPAuth/src/main/res/values-*/strings.xml
