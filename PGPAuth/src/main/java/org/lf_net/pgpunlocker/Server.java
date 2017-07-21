@@ -12,15 +12,19 @@ public class Server {
     String _name;
     String _url;
     String _apgKey;
+    String _openpgpgKey;
+    boolean _saveKey;
 
     public Server(String name, String url) {
-        this(name, url, "");
+        this(name, url, "", "", false);
     }
 
-    public Server(String name, String url, String apgKey) {
+    public Server(String name, String url, String apgKey, String openpgpgKey, boolean saveKey) {
         _name = name;
         _url = url;
         _apgKey = apgKey;
+        _openpgpgKey = openpgpgKey;
+        _saveKey = saveKey;
     }
 
     public String name() {
@@ -35,6 +39,14 @@ public class Server {
         return _apgKey;
     }
 
+    public String openpgpgKey() {
+        return _openpgpgKey;
+    }
+
+    public boolean saveKey() {
+        return _saveKey;
+    }
+
     public void setName(String name) {
         _name = name;
     }
@@ -45,6 +57,18 @@ public class Server {
 
     public void setApgKey(String apgKey) {
         _apgKey = apgKey;
+    }
+
+    public void setOpenpgpgKey(String openpgpgKey) {
+        _openpgpgKey = openpgpgKey;
+    }
+
+    public void keepKey() {
+        _saveKey = true;
+    }
+
+    public void forgetKey() {
+        _saveKey = false;
     }
 
     public boolean isEmpty() {
@@ -59,8 +83,8 @@ public class Server {
             return new Server(parts[0], parts[1]);
         }
 
-        if (parts.length == 3) {
-            return new Server(parts[0], parts[1], parts[2]);
+        if (parts.length == 5) {
+            return new Server(parts[0], parts[1], parts[2], parts[3], Boolean.parseBoolean(parts[4]));
         }
 
         return null;
@@ -73,6 +97,10 @@ public class Server {
             ret.put("name", _name);
             ret.put("url", _url);
             ret.put("apgKey", _apgKey);
+            if (saveKey()) {
+                ret.put("openpgpgKey", _openpgpgKey);
+            }
+            ret.put("saveKey", _saveKey);
         } catch (JSONException e) {
             // should not happen as we just serialize a bunch of strings
             return null;
@@ -86,8 +114,12 @@ public class Server {
             String name = obj.getString("name");
             String url = obj.getString("url");
             String apgKey = obj.getString("apgKey");
-
-            return new Server(name, url, apgKey);
+            boolean saveTheKey = obj.getBoolean("saveKey");
+            String openpgpgKey = "";
+            if (saveTheKey) {
+                openpgpgKey = obj.getString("openpgpgKey");
+            }
+            return new Server(name, url, apgKey, openpgpgKey, saveTheKey);
         } catch (JSONException e) {
             // should not happen as we just serialize a bunch of strings
             throw e;
