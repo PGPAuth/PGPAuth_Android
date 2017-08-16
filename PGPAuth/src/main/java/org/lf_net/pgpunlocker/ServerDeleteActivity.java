@@ -6,26 +6,26 @@ import android.view.View;
 
 public class ServerDeleteActivity extends Activity {
 
-	int _serverIndex;
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_server_delete);
-		
-		Bundle extras = getIntent().getExtras();
-		if(extras != null) {
-			_serverIndex = extras.getInt("ServerIndex");
-		}
-	}
-	
-	public void onDeleteClicked(View view) {
-		ServerManager.deleteServer(_serverIndex);
-		ServerManager.saveToFile(this);
-		finish();
-	}
-	
-	public void onCancelClicked(View view) {
-		finish();
-	}
+    int _serverIndex;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_server_delete);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            _serverIndex = extras.getInt("ServerIndex");
+        }
+    }
+
+    public void onDeleteClicked(View view) {
+        ServerManager.deleteServer(_serverIndex);
+        ServerManager.saveToFile(this);
+        finish();
+    }
+
+    public void onCancelClicked(View view) {
+        finish();
+    }
 }
