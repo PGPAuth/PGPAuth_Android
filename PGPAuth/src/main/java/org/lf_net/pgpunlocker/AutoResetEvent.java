@@ -2,18 +2,15 @@
 
 package org.lf_net.pgpunlocker;
 
-public class AutoResetEvent
-{
+public class AutoResetEvent {
     private final Object _monitor = new Object();
     private volatile boolean _isOpen = false;
 
-    public AutoResetEvent(boolean open)
-    {
+    public AutoResetEvent(boolean open) {
         _isOpen = open;
     }
 
-    public void waitOne() throws InterruptedException
-    {
+    public void waitOne() throws InterruptedException {
         synchronized (_monitor) {
             while (!_isOpen) {
                 _monitor.wait();
@@ -22,8 +19,7 @@ public class AutoResetEvent
         }
     }
 
-    public void waitOne(long timeout) throws InterruptedException
-    {
+    public void waitOne(long timeout) throws InterruptedException {
         synchronized (_monitor) {
             long t = System.currentTimeMillis();
             while (!_isOpen) {
@@ -36,16 +32,14 @@ public class AutoResetEvent
         }
     }
 
-    public void set()
-    {
+    public void set() {
         synchronized (_monitor) {
             _isOpen = true;
             _monitor.notify();
         }
     }
 
-    public void reset()
-    {
+    public void reset() {
         _isOpen = false;
     }
 }
