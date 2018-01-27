@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--maybe this will be used again...-->
+  <string name="pref_key">Chiave PGP</string>
+  <string name="pref_key_summary">La chiave usata per segnare (soltanto APG)</string>
+  <string name="pref_forceapg">Forzare APG</string>
+  <string name="pref_forceapg_summary">Usa APG anche quando OpenKeychain è installato</string>
+  <!--Activity titles-->
+  <string name="settings_title">Impostazioni</string>
+  <string name="title_activity_server_delete">Cancella server</string>
+  <string name="about_title">Su PGPAuth</string>
+  <string name="title_activity_server_edit">Modifica server</string>
+  <!--Menu items-->
+  <string name="contextmenu_title">Scegli azione</string>
+  <string name="action_settings">Impostazioni</string>
+  <string name="action_new_server">Nuovo server</string>
+  <string name="action_delete">Cancella</string>
+  <string name="action_edit">Modifica</string>
+  <string name="action_share">Condividi</string>
+  <!--Error strings-->
+  <string name="apg_and_opengpg_keychain_not_installed">Hai né APG nè OpenPGP Keychani installato!</string>
+  <string name="apg_invalid_version">Versione APG non supportato!</string>
+  <string name="apg_forced_but_not_installed">Non è possibile forzare APG quando non è installato ...</string>
+  <string name="no_server_set">Per favore impostare un server!</string>
+  <string name="invalid_server_set">La tua configurazione server URL sembra d\'essere non valida!</string>
+  <string name="unknown_error">Errore sconosciuto!</string>
+  <string name="invalid_settings_detected">Impostazioni non valide. Controllare le preferenze.</string>
+  <!--UI elements-->
+  <string name="btn_lock">Bloccare</string>
+  <string name="btn_unlock">Sbloccare</string>
+  <string name="server_delete_warning">Questo non può essere annullato!</string>
+  <string name="name_input">Nome:</string>
+  <string name="url_input">URL:</string>
+  <string name="about_text">Questa applicazione invia le richieste firmate PGP ad un server definito.\nLe richieste contengono un\'azione (apertura o chiusura) e un timestamp, per la protezione contro gli attacchi di ripetizione.\n\nIl server quindi controlla l\'azione, il timestamp, la validità della firma e la autorizzazione della chiave utilizzata. Dopo tutti questi controlli, l\'azione viene eseguita dal server.</string>
+</resources>

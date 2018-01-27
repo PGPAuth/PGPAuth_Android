@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--maybe this will be used again...-->
+  <string name="pref_key">PGP ŝlosilo</string>
+  <string name="pref_key_summary">La PGP ŝlosilo estos uzata por subskribi (nur APG)</string>
+  <string name="pref_forceapg">forto APG</string>
+  <!--Activity titles-->
+  <string name="settings_title">Agordoj</string>
+  <!--Menu items-->
+  <string name="action_settings">Agordoj</string>
+  <!--Error strings-->
+  <string name="apg_and_opengpg_keychain_not_installed">Nek APG ankoraŭ OpenKeychain estas instalitaj!</string>
+  <string name="apg_invalid_version">La APG instalita versio ne estas subtenata!</string>
+  <!--UI elements-->
+  <string name="btn_lock">ŝlosi</string>
+  <string name="btn_unlock">malŝlosi</string>
+</resources>

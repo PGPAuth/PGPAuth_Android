@@ -37,4 +37,6 @@ ehthumbs.db
 Thumbs.db
 
 # language-specific strings (managed by transifex)
-PGPAuth/src/main/res/values-*/strings.xml
+# XXX: translations are added to repo at the moment
+#      to allow automated builds in F-Droid
+#PGPAuth/src/main/res/values-*/strings.xml

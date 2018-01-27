@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--maybe this will be used again...-->
+  <string name="pref_key">PGP-Key</string>
+  <string name="pref_key_summary">Der zum Signieren zu verwendende Schlüssel (nur APG)</string>
+  <string name="pref_forceapg">APG erzwingen</string>
+  <string name="pref_forceapg_summary">Verwende APG auch wenn OpenKeychain installiert ist.</string>
+  <!--Activity titles-->
+  <string name="settings_title">Einstellungen</string>
+  <string name="title_activity_server_delete">Server entfernen</string>
+  <string name="about_title">Über PGPAuth</string>
+  <string name="title_activity_server_edit">Server bearbeiten</string>
+  <!--Menu items-->
+  <string name="contextmenu_title">Aktion auswählen</string>
+  <string name="action_settings">Einstellungen</string>
+  <string name="action_new_server">Server hinzufügen</string>
+  <string name="action_delete">Löschen</string>
+  <string name="action_edit">Bearbeiten</string>
+  <string name="action_share">Teilen</string>
+  <!--Error strings-->
+  <string name="apg_and_opengpg_keychain_not_installed">Weder APG noch OpenKeychain sind installiert!</string>
+  <string name="apg_invalid_version">APG-Version wird nicht unterstützt!</string>
+  <string name="apg_forced_but_not_installed">APG kann nur erzwungen werden, wenn es installiert ist ...</string>
+  <string name="no_server_set">Bitte einen Server einstellen!</string>
+  <string name="invalid_server_set">Der eingestellte Server scheint ungültig zu sein!</string>
+  <string name="unknown_error">Unbekannter Fehler!</string>
+  <string name="invalid_settings_detected">Ungültige Einstellungen erkannt! Bitte Einstellungen überprüfen.</string>
+  <!--UI elements-->
+  <string name="btn_lock">Öffnen</string>
+  <string name="btn_unlock">Schließen</string>
+  <string name="server_delete_warning">Dies kann nicht rückgängig gemacht werden!</string>
+  <string name="name_input">Name:</string>
+  <string name="url_input">Adresse:</string>
+  <string name="about_text">Diese App sendet PGP-signierte Anfragen an einen definierten Server.\nDiese Anfragen bestehen aus einer Aktion (momentan öffnen oder schließen) und einem Zeitstempel, um das Abfangen und erneute Senden der Anfrage zu unterbinden.\n\nDer Server prüft die Aktion der Anfrage, den Zeitstempel, die Gültigkeit der Signatur und die Autorisierung des verwendeten Schlüssels bis er schließlich die Aktion ausführt.</string>
+</resources>
