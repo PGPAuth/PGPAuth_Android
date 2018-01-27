@@ -1,20 +1,27 @@
 # PGPAuth
-[![GitHub version](https://badge.fury.io/gh/PGPAuth%2FPGPAuth_Android.svg)](http://badge.fury.io/gh/PGPAuth%2FPGPAuth_Android) [![Build Status](https://praios.lf-net.org/jenkins/buildStatus/icon?job=PGPAuth_Android)](https://praios.lf-net.org/jenkins/job/PGPAuth_Android)
+[![GitHub version](https://badge.fury.io/gh/PGPAuth%2FPGPAuth_Android.svg)](http://badge.fury.io/gh/PGPAuth%2FPGPAuth_Android) 
 
 ## What is it?
-It is an App to send a PGP-signed request to a server to open or close $things.
-A request consists of an action (for example "open" or "close") and a timestamp, so you can configure how long a request is valid.
-The whole request is then signed with PGP (currently using the APG App on Android) and sent to the specified Server via HTTP-POST.
+PGPAuth is an App to send PGP signed requests to servers.
+
+Currently the actions to send are hardcoded to "open" and "close", but this is planned to be configurable on the server. If you want this feature, please comment in #3.
+
+## Use cases
+
+* digital key for doors (i.e. for small organizations or hacker spaces)
+* beer taps (configure one server per tap and have IoT beer taps)
+  * people actually did that
 
 ## How to use it?
-You'll need to have a web-accessible HTTP-Server with support for server-side programs (CGI or alike [PHP, ASP, ...]).
-You will get the signed message via the "data"-POST-parameter.
-Then you can check if the signature is valid, the signature key is authorised and the timestamp is not that long ago it's already invalid.
-When everything is checked, you will have to extract the request from the message and do something with it.
 
-You can use PGPAuth_CGI to handle requests:
-https://github.com/PGPAuth/PGPAuth_CGI
+The smartphones having this app installed need direct access to the server in question. Communication is done over HTTP(S). 
+
+Requests are POSTed to the server. For details, please look at the reference implementation at https://github.com/PGPAuth/PGPAuth_CGI.
+
 
 ## How can I help?
-You can use it and provide feedback if you wish a feature or catched a bug.
-You can also help with translation, just go to https://www.transifex.com/projects/p/pgpauth/ 
+* use it and provide feedback
+* help with translation: https://www.transifex.com/projects/p/pgpauth/
+* work on reported issues
+* write docs
+* create implementations for other systems
