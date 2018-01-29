@@ -71,12 +71,12 @@ public class Logic {
         }
     }
 
-    public void doActionOnServerWithFeedback(String action, String server, String keyAPG) {
-        String ret = doActionOnServer(action, server, keyAPG);
+    public void doActionOnServerWithFeedback(String action, String server, String keyAPG, String openPGPKey) {
+        String ret = doActionOnServer(action, server, keyAPG, openPGPKey);
         _guiHelper.showUserFeedback(ret);
     }
 
-    public String doActionOnServer(String action, String server, String keyAPG) {
+    public String doActionOnServer(String action, String server, String keyAPG, String openPGPKey) {
         if (server == "" || !URLUtil.isValidUrl(server)) {
             if (server == "") {
                 return _context.getString(R.string.no_server_set);
@@ -106,10 +106,16 @@ public class Logic {
             Intent intent = new Intent();
             intent.setAction(OpenPgpApi.ACTION_SIGN);
             intent.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
+            if (!openPGPKey.isEmpty()) {
+                intent.putExtra(OpenPgpApi.EXTRA_KEY_ID, openPGPKey);
+            }
             intent.putExtra("PGPAuth_SIGNDATA", request);
 
             try {
                 sendOpenKeychainIntent(intent);
+                if (openPGPKey.isEmpty()) {
+                    openPGPKey = intent.getStringExtra(OpenPgpApi.EXTRA_KEY_ID);
+                }
             } catch (Exception e) {
                 return e.getLocalizedMessage();
             }
